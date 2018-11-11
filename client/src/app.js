@@ -12,7 +12,7 @@ import { onError } from 'apollo-link-error';
 import Config from 'react-native-config';
 import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
 
-const URL = '192.168.42.212:8080';
+const URL = Config.SERVER_URL;
 
 const store = createStore(
   combineReducers({
