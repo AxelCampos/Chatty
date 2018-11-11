@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View, Text, StyleSheet, Image,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import LoginForm from '../components/loginForm';
 
 // create component
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'aqua',
+    backgroundColor: '#ce2568',
   },
   loginContainer: {
     alignItems: 'center',

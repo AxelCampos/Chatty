@@ -112,7 +112,7 @@ const MainScreenNavigator = createBottomTabNavigator(
       screen: Login,
       navigationOptions: {
         tabBarLabel: 'Login',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="burn" color={tintColor} />,
+        tabBarIcon: ({ tintColor }) => <Icon size={20} name="lock" color={tintColor} />,
         tabBarColor: 'yellow',
       },
     },
