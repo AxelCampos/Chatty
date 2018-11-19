@@ -64,7 +64,37 @@ const Search = createMaterialTopTabNavigator(
 // tabs in main screen
 const MainScreenNavigator = createBottomTabNavigator(
   {
-    Search: {
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        /* tabBarLabel: 'Login',
+        tabBarIcon: ({ tintColor }) => <Icon size={20} name="lock" color={tintColor} />,
+        tabBarColor: 'yellow', */
+      },
+    },
+  },
+  {
+    initialRouteName: 'Login',
+    navigationOptions: {
+      tabBarVisible: false,
+    },
+    /* tabBarOptions: {
+      activeTintColor: 'black',
+      activeBackgroundColor: '#A5DFF1',
+      inactiveBackgroundColor: '#52ABD8',
+      inactiveTintColor: '#D3BCDD',
+      tabStyle: {
+        borderTopColor: 'grey',
+        borderTopWidth: 0.4,
+      },
+
+    }, */
+  },
+);
+
+const AppNavigator = createStackNavigator(
+  {
+    /* Search: {
       screen: Search,
       navigationOptions: {
         tabBarLabel: 'Search',
@@ -107,36 +137,7 @@ const MainScreenNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Icon size={20} name="cog" color={tintColor} />,
         tabBarColor: 'violet',
       },
-    },
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        tabBarLabel: 'Login',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="lock" color={tintColor} />,
-        tabBarColor: 'yellow',
-      },
-    },
-  },
-  {
-    initialRouteName: 'Login',
-    navigationOptions: {
-      tabBarVisible: true,
-    },
-    tabBarOptions: {
-      activeTintColor: 'black',
-      activeBackgroundColor: '#A5DFF1',
-      inactiveBackgroundColor: '#52ABD8',
-      inactiveTintColor: '#D3BCDD',
-      tabStyle: {
-        borderTopColor: 'grey',
-        borderTopWidth: 0.4,
-      },
-    },
-  },
-);
-
-const AppNavigator = createStackNavigator(
-  {
+    }, */
     Main: { screen: MainScreenNavigator },
     Messages: { screen: Messages },
     Profile: { screen: Profile },
