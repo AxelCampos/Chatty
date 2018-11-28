@@ -88,7 +88,7 @@ class Profile extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       enableScrollViewScroll: true,
       switcher: false,
     };
@@ -99,7 +99,7 @@ class Profile extends Component {
   addLike() {
     const { updateUser, user } = this.props;
     this.setState({
-      switcher : true
+      switcher: true
     });
     updateUser({
       id: user.id,
@@ -123,7 +123,7 @@ class Profile extends Component {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
       });
   }
 
@@ -148,7 +148,7 @@ class Profile extends Component {
     const { switcher } = this.state;
     return (
 
-      
+
       <View
         style={styles.container}
         onStartShouldSetResponderCapture={() => {
@@ -179,7 +179,7 @@ class Profile extends Component {
               <Text style={styles.textStyle}>Ultima conexión: 13h</Text>
             </View>
             <View style={styles.icons}>
-              {switcher == false? <Icon.Button
+              {switcher == false ? <Icon.Button
                 underlayColor="transparent"
                 style={styles.iconStyle}
                 color="#F0625A"
@@ -188,17 +188,17 @@ class Profile extends Component {
                 borderRadius={30}
                 name="cards-heart"
                 onPress={this.addLike}
-              />:<Icon.Button
-              underlayColor="transparent"
-              style={styles.iconStyle}
-              color="#F0625A"
-              backgroundColor="white"
-              size={30}
-              borderRadius={30}
-              name="cards-heart"
-              
-            />}
-              
+              /> : <Icon.Button
+                  underlayColor="transparent"
+                  style={styles.iconStyle}
+                  color="#F0625A"
+                  backgroundColor="white"
+                  size={30}
+                  borderRadius={30}
+                  name="cards-heart"
+
+                />}
+
               <Icon.Button
                 underlayColor="transparent"
                 style={styles.iconStyle}
@@ -218,7 +218,7 @@ class Profile extends Component {
   }
 }
 
-Profile.propTypes = {
+/*Profile.propTypes = {
   updateUser: PropTypes.func.isRequired,
   createConversation: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
@@ -236,7 +236,7 @@ Profile.propTypes = {
       url: PropTypes.string,
     }),
   }),
-};
+};*/
 const createConversationMutation = graphql(CREATE_CONVERSATION_MUTATION, {
   props: ({ mutate }) => ({
     createConversation: group => mutate({
@@ -261,7 +261,7 @@ const updateUserMutation = graphql(UPDATE_USER_MUTATION, {
     updateUser: user => mutate({
       variables: { user },
 
-     
+
     }),
   }),
 });

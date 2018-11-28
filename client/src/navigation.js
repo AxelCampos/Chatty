@@ -29,6 +29,7 @@ import FinalizeGroup from './screens/finalize-group.screen';
 import GroupDetails from './screens/group-details.screen';
 import Settings from './screens/setting.screen';
 import EditProfile from './screens/edit-profile.screen';
+import LifestyleResult from './screens/lifestyle-result.screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -159,6 +160,12 @@ const AppNavigator = createStackNavigator(
         title: 'Editar Perfil',
       }
     },
+    LifestyleResult: {
+      screen: LifestyleResult,
+      navigationOptions: {
+        title: 'Resultado de la Búsqueda',
+      }
+    }
   },
   {
     navigationOptions: {
