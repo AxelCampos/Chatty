@@ -36,27 +36,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 5,
     },
-    button1: {
+    sbutton1: {
         flex: 0.5,
+        padding: 6,
+        alignSelf: "center",
+        justifyContent: 'space-evenly',
+    },
+    sbutton2: {
+        flex: 0.5,
+        padding: 6,
+        alignSelf: "center",
+    },
+    button1: {
+        //flex: 0.5,
         padding: 6,
         borderColor: '#eee',
         borderBottomWidth: 1,
         alignSelf: "center",
-        marginLeft: 35,
-        marginRight: 165,
+        //marginLeft: 35,
+        //marginRight: 165,
         //position: 'absolute',
         //left: 30,
         //width: 150,
     },
     button2: {
-        flex: 0.5,
+        //flex: 0.5,
         padding: 6,
         borderColor: '#eee',
         borderBottomWidth: 1,
         alignSelf: "center",
         //marginLeft: 20,
-        position: 'absolute',
-        left: 250,
+        //position: 'absolute',
+        //left: 250,
         //width: 150,
     },
     title: {
@@ -114,13 +125,17 @@ const styles = StyleSheet.create({
 
 const Header = ({ saveSearch, goToMySearches }) => (
     <View style={styles.header}>
-        <Button style={styles.button1} title="Salvar" onPress={saveSearch} />
-        <Button style={styles.button2} title="Ver Búsquedas" onPress={goToMySearches} />
+        <View style={styles.sbutton1}>
+            <Button style={styles.button1} title="Salvar" onPress={saveSearch} />
+        </View>
+        <View style={styles.sbutton2}>
+            <Button style={styles.button2} title="Ver Búsquedas" onPress={goToMySearches} />
+        </View>
     </View>
 );
 
 const UserChosen = ({ item, goToProfile }) => {
-    console.log(item.username, item.gender, item.civilStatus, item.children);
+    //console.log(item.username, item.gender, item.civilStatus, item.children);
     return (
         <TouchableHighlight key={item.id} onPress={goToProfile}>
             <View style={styles.tendencyContainer}>
@@ -143,11 +158,16 @@ const UserChosen = ({ item, goToProfile }) => {
 class LifestyleResult extends Component {
     constructor(props) {
         super(props);
-        const { users } = props;
+        //const { users } = props;
+        //const { navigation } = this.props;
+        const { state } = this.props.navigation;
+        console.log('gender en constructor: ', state.params.gender);
+        console.log('civilStatus en constructor: ', state.params.civilStatus);
+        console.log('children en constructor: ', state.params.children);
         this.state = {
-            gender: 'hombre',
-            civilStatus: 'soltero',
-            children: 'no tiene hijos',
+            gender: state.params.gender,
+            civilStatus: state.params.civilStatus,
+            children: state.params.children,
         }
     }
 
@@ -168,15 +188,31 @@ class LifestyleResult extends Component {
         console.log('aqui');
     };
 
+    /*selectUsers = (item) => {
+        console.log('state gender: ', this.state.gender);
+        return (item.gender == this.state.gender) && (item.civilStatus == this.state.civilStatus) && (item.children == this.state.children);
+    }*/
+
+    selectGender = (item) => {
+        return item.gender == this.state.gender;
+    };
+    selectCivilStatus = (item) => {
+        return item.civilStatus == this.state.civilStatus;
+    };
+    selectChildren = (item) => {
+        return item.children == this.state.children;
+    };
+
     render() {
-        //const { users: ownProps.navigation.state.params.users } = navigation
         const { users } = this.props;
+        console.log('usuarios', users);
         return (
             <View style={styles.container}>
                 <Header saveSearch={this.saveSearch} goToMySearches={this.goToMySearches} />
                 <View style={styles.main}>
                     <FlatList
-                        data={users}
+                        //data={users.slice().filter(this.selectGender)}
+                        data={users.filter(this.selectGender).filter(this.selectCivilStatus).filter(this.selectChildren)}
                         keyExtractor={this.keyExtractor}
                         renderItem={this.renderItem}
                     //numColumns={2}

@@ -29,6 +29,7 @@ export const USER_QUERY = gql`
         id
         username
         photoprofile {
+          id
           url
         }
       }

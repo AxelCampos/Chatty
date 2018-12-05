@@ -11,6 +11,7 @@ import {
     ScrollView,
     Image,
     Button,
+    Switch,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { graphql, compose } from 'react-apollo';
@@ -96,7 +97,7 @@ class Lifestyle extends Component {
         this.state = {
             gender: 'hombre',
             civilStatus: 'soltero',
-            children: 'no tiene hijos',
+            children: 'no especificado',
         }
     }
 
@@ -106,19 +107,19 @@ class Lifestyle extends Component {
 
     goToResult = users => () => {
         const { navigation: { navigate } } = this.props;
-        navigate('LifestyleResult', { users: users });
+        const { gender, civilStatus, children } = this.state;
+        console.log("ppppp", gender);
+        navigate('LifestyleResult',
+            {
+                users: users,
+                gender: gender,
+                civilStatus: civilStatus,
+                children: children,
+            });
     }
 
-    selectGender = (item) => {
-        return item.gender == this.state.gender;
-    }
-    selectCivilStatus = (item) => {
-        return item.civilStatus == this.state.civilStatus;
-    }
-    selectChildren = (item) => {
-        return item.children == this.state.children;
-    }
-
+    //switchGender
+    //<Switch onValueChange={this.switchGender} value={false} disabled={true} thumbColor='green'/>
     render() {
 
         const { users } = this.props;
@@ -133,6 +134,7 @@ class Lifestyle extends Component {
                             <Picker.Item label='mujer' value='mujer' />
                             <Picker.Item label='otro' value='otro' />
                         </Picker>
+
                         <Text style={styles.label}>Estado Civil: </Text>
                         <Picker style={styles.picker} selectedValue={this.state.civilStatus} onValueChange={(civilStatus) => this.setState({ civilStatus })}>
                             <Picker.Item label='soltero' value='soltero' />
