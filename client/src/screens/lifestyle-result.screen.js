@@ -194,14 +194,40 @@ class LifestyleResult extends Component {
     }*/
 
     selectGender = (item) => {
-        return item.gender == this.state.gender;
+        const { gender } = this.state;
+        console.log('gender final: ');
+        if (gender == 'todos') {
+            console.log(item.username, item.gender);
+            return item.gender == item.gender;
+        } else {
+            console.log(item.username, item.gender);
+            return item.gender == this.state.gender;
+        }
     };
     selectCivilStatus = (item) => {
-        return item.civilStatus == this.state.civilStatus;
+        const { civilStatus } = this.state;
+        console.log('civilStatus final: ');
+        if (civilStatus == 'todos') {
+            console.log(item.username, item.civilStatus);
+            return item.civilStatus == item.civilStatus;
+        } else {
+            console.log(item.username, item.civilStatus);
+            return item.civilStatus == this.state.civilStatus;
+        }
     };
     selectChildren = (item) => {
-        return item.children == this.state.children;
+        const { children } = this.state;
+        console.log('children final: ');
+        if (children == 'todos') {
+            console.log(item.username, item.children);
+            return item.children == item.children;
+        } else {
+            console.log(item.username, item.children);
+            return item.children == this.state.children;
+        }
     };
+
+    //data={users.filter(this.selectGender).filter(this.selectCivilStatus).filter(this.selectChildren)}
 
     render() {
         const { users } = this.props;
@@ -211,7 +237,6 @@ class LifestyleResult extends Component {
                 <Header saveSearch={this.saveSearch} goToMySearches={this.goToMySearches} />
                 <View style={styles.main}>
                     <FlatList
-                        //data={users.slice().filter(this.selectGender)}
                         data={users.filter(this.selectGender).filter(this.selectCivilStatus).filter(this.selectChildren)}
                         keyExtractor={this.keyExtractor}
                         renderItem={this.renderItem}
