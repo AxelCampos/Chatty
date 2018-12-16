@@ -114,7 +114,11 @@ const Header = ({ backToLifestyle }) => (
     ],
   });*/
 
-class Searches extends Component {
+class MySearches extends Component {
+    static navigationOptions = () => ({
+        title: 'My Searches'
+    });
+
     constructor(props) {
         super(props);
         const { navigation } = this.props;
@@ -148,7 +152,7 @@ class Searches extends Component {
 
     backToLifestyle = () => {
         const { navigation: { navigate, state } } = this.props;
-        navigate('Lifestyle',
+        navigate('Characteristic',
             {
                 userId: state.params.userId,
             });
@@ -222,4 +226,4 @@ export default compose(
     deleteSearchMutation,
     searchesQuery,
     withLoading,
-)(Searches);
+)(MySearches);

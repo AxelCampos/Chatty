@@ -5,6 +5,7 @@ import {
   createStackNavigator,
   createMaterialTopTabNavigator,
   createBottomTabNavigator,
+  createSwitchNavigator,
 } from 'react-navigation';
 
 import {
@@ -21,7 +22,7 @@ import Messages from './screens/messages.screen';
 import User from './screens/user.screen';
 import Nearer from './screens/near.screen';
 import Tendencies from './screens/tendencies.screen';
-import Lifestyle from './screens/lifestyle.screen';
+import Characteristic from './screens/lifestyle.screen';
 import Profile from './screens/profile.screen';
 import Match from './screens/match.screen';
 import NewGroup from './screens/new-group.screen';
@@ -31,7 +32,7 @@ import Settings from './screens/setting.screen';
 import EditProfile from './screens/edit-profile.screen';
 import GroupImage from './screens/group-image.screen';
 import LifestyleResult from './screens/lifestyle-result.screen';
-import Searches from './screens/searches.screen';
+import MySearches from './screens/searches.screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,6 +51,29 @@ const styles = StyleSheet.create({
   },
 });
 
+const Lifestyle = createSwitchNavigator(
+  {
+    Characteristic: {
+      screen: Characteristic,
+      navigationOptions: {
+        title: 'Búsqueda por Característica',
+      }
+    },
+    LifestyleResult: {
+      screen: LifestyleResult,
+      navigationOptions: {
+        title: 'Resultado de la Búsqueda',
+      }
+    },
+    MySearches: {
+      screen: MySearches,
+      navigationOptions: {
+        title: 'Búsquedas',
+      }
+    },
+  },
+);
+
 const Search = createMaterialTopTabNavigator(
   {
     Tendencias: {
@@ -60,6 +84,12 @@ const Search = createMaterialTopTabNavigator(
     },
     Lifestyle: {
       screen: Lifestyle,
+      /*navigationOptions: (props) => {
+        console.log('title', props.navigation.state.routeName);
+        return ({
+          title: props.navigation.state.routeName,
+        });
+      },*/
     },
   },
   {
@@ -158,18 +188,6 @@ const AppNavigator = createStackNavigator(
         title: 'Editar Perfil',
       },
     },
-    LifestyleResult: {
-      screen: LifestyleResult,
-      navigationOptions: {
-        title: 'Resultado de la Búsqueda',
-      }
-    },
-    Searches: {
-      screen: Searches,
-      navigationOptions: {
-        title: 'Búsquedas',
-      }
-    },
     GroupImage: { screen: GroupImage },
   },
   {
@@ -179,6 +197,7 @@ const AppNavigator = createStackNavigator(
     headerMode: 'screen',
   },
 );
+
 
 // reducer initialization code
 const initialState = AppNavigator.router.getStateForAction(

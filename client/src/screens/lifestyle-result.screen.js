@@ -217,6 +217,10 @@ const UserChosen = ({ item, goToProfile }) => {
 };
 
 class LifestyleResult extends Component {
+    static navigationOptions = () => ({
+        title: 'Search Results'
+    });
+
     constructor(props) {
         super(props);
         //const { users } = props;
@@ -275,7 +279,7 @@ class LifestyleResult extends Component {
 
     goToMySearches = () => {
         const { navigation: { navigate } } = this.props;
-        navigate('Searches', { userId: this.state.userId });
+        navigate('MySearches', { userId: this.state.userId });
     };
 
     viewNameInput = () => {

@@ -100,7 +100,11 @@ const styles = StyleSheet.create({
     },
 });
 
-class Lifestyle extends Component {
+class Characteristic extends Component {
+    static navigationOptions = () => ({
+        title: 'Characteristic'
+    });
+
     constructor(props) {
         super(props);
         const { users } = props;
@@ -119,6 +123,8 @@ class Lifestyle extends Component {
             childrenThumbcolor: 'red',
         }
     }
+
+
 
     goToResult = users => () => {
         const { navigation: { navigate } } = this.props;
@@ -272,4 +278,4 @@ const usersQuery = graphql(USERS_QUERY, {
 export default compose(
     usersQuery,
     withLoading,
-)(Lifestyle);
+)(Characteristic);
