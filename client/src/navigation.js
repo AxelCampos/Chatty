@@ -5,6 +5,7 @@ import {
   createStackNavigator,
   createMaterialTopTabNavigator,
   createBottomTabNavigator,
+  StackNavigator,
 } from 'react-navigation';
 
 import {
@@ -21,11 +22,24 @@ import Messages from './screens/messages.screen';
 import User from './screens/user.screen';
 import Nearer from './screens/near.screen';
 import Tendencies from './screens/tendencies.screen';
-import ShowPhoto from './screens/photos.screen';
 import Lifestyle from './screens/lifestyle.screen';
 import Profile from './screens/profile.screen';
 import Match from './screens/match.screen';
+import NewGroup from './screens/new-group.screen';
+import FinalizeGroup from './screens/finalize-group.screen';
+import GroupDetails from './screens/group-details.screen';
+import Settings from './screens/setting.screen';
+import EditProfile from './screens/edit-profile.screen';
 import Login from './screens/login.screen';
+import Register from './screens/register.screen';
+import GroupImage from './screens/group-image.screen';
+import LifestyleResult from './screens/lifestyle-result.screen';
+import Searches from './screens/searches.screen';
+import MyLikes from './screens/my-likes.screen';
+import WhoLikesMe from './screens/who-likes-me.screen';
+import MatchList from './screens/match-list.screen';
+import Notifications from './screens/notifications.screen';
+import Blacklist from './screens/blacklist.screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,12 +48,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  tabText: {
+    color: '#777',
+    fontSize: 10,
+    justifyContent: 'center',
+  },
+  selected: {
+    color: 'blue',
+  },
 });
-const TestScreen = title => () => (
-  <View style={styles.container}>
-    <Text>{title}</Text>
-  </View>
-);
+
 const Search = createMaterialTopTabNavigator(
   {
     Tendencias: {
@@ -47,9 +65,6 @@ const Search = createMaterialTopTabNavigator(
     },
     Cerca: {
       screen: Nearer,
-    },
-    Nuevo: {
-      screen: ShowPhoto,
     },
     Lifestyle: {
       screen: Lifestyle,
@@ -61,66 +76,149 @@ const Search = createMaterialTopTabNavigator(
   },
 );
 
-// tabs in main screen
-const MainScreenNavigator = createBottomTabNavigator(
+const MyUser = createMaterialTopTabNavigator(
   {
-    Login: {
-      screen: Login,
+    User: {
+      screen: User,
       navigationOptions: {
-        /* tabBarLabel: 'Login',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="lock" color={tintColor} />,
-        tabBarColor: 'yellow', */
+        title: 'Profile',
+      },
+    },
+    MyLikes: {
+      screen: MyLikes,
+      navigationOptions: {
+        title: 'My Likes',
+      },
+    },
+    WhoLikesMe: {
+      screen: WhoLikesMe,
+      navigationOptions: {
+        title: 'Who Likes Me',
+      },
+    },
+    MatchList: {
+      screen: MatchList,
+      navigationOptions: {
+        title: 'Match List',
       },
     },
   },
   {
-    initialRouteName: 'Login',
-    navigationOptions: {
-      tabBarVisible: false,
+    initialRouteName: 'User',
+    activeColor: 'black',
+  },
+);
+
+// tabs in main screen
+const MainScreenNavigator = StackNavigator(
+  {
+    loginComp: {
+      screen: createBottomTabNavigator({
+        register: {
+          screen: Register,
+          navigationOptions: {
+            tabBarLabel: 'Register',
+            tabBarIcon: ({ tintColor }) => <Icon size={20} name="user-circle" color={tintColor} />,
+            tabBarColor: 'violet',
+          },
+        },
+        login: {
+          screen: Login,
+          navigationOptions: {
+            tabBarLabel: 'Login',
+            tabBarIcon: ({ tintColor }) => <Icon size={20} name="lock" color={tintColor} />,
+            tabBarColor: 'orange',
+          },
+        },
+      }),
     },
-    /* tabBarOptions: {
-      activeTintColor: 'black',
-      activeBackgroundColor: '#A5DFF1',
-      inactiveBackgroundColor: '#52ABD8',
+    mainComp: {
+      screen: StackNavigator({
+        main: {
+          screen: createBottomTabNavigator({
+            Search: {
+              screen: Search,
+              navigationOptions: {
+                tabBarLabel: 'Search',
+                tabBarIcon: ({ tintColor }) => <Icon size={20} name="search" color={tintColor} />,
+                tabBarColor: 'blue',
+              },
+            },
+
+            Match: {
+              screen: Match,
+              navigationOptions: {
+                tabBarLabel: 'Match',
+                tabBarIcon: ({ tintColor }) => <Icon size={20} name="burn" color={tintColor} />,
+                tabBarColor: 'pink',
+              },
+            },
+
+            Chats: {
+              screen: Groups,
+              navigationOptions: {
+                tabBarLabel: 'Chats',
+                tabBarIcon: ({ tintColor }) => (
+                  <Icon size={20} name="rocketchat" color={tintColor} />
+                ),
+                tabBarColor: 'green',
+              },
+            },
+
+            MyUser: {
+              screen: MyUser,
+              navigationOptions: {
+                tabBarLabel: 'Profile',
+                tabBarIcon: ({ tintColor }) => <Icon size={20} name="user" color={tintColor} />,
+                tabBarColor: 'orange',
+              },
+            },
+
+            Settings: {
+              screen: Settings,
+              navigationOptions: {
+                tabBarLabel: 'Settings',
+                tabBarIcon: ({ tintColor }) => <Icon size={20} name="cog" color={tintColor} />,
+                tabBarColor: 'violet',
+              },
+            },
+          }),
+          navigationOptions: {
+            title: 'Loveo',
+          },
+          headerMode: 'screen',
+        },
+      }),
+    },
+  },
+
+  {
+    initialRouteName: 'loginComp',
+    navigationOptions: {
+      tabBarVisible: true,
+      header: null,
+    },
+    tabBarOptions: {
+      activeTintColor: '#251d26',
+      activeBackgroundColor: '#ba1ba7',
+      inactiveBackgroundColor: '#760d82',
       inactiveTintColor: '#D3BCDD',
       tabStyle: {
-        borderTopColor: 'grey',
+        borderTopColor: 'purple',
         borderTopWidth: 0.4,
       },
-
-    }, */
+    },
   },
 );
 
 const AppNavigator = createStackNavigator(
   {
-    /* Search: {
-      screen: Search,
+    Main: {
+      screen: MainScreenNavigator,
       navigationOptions: {
-        tabBarLabel: 'Search',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="search" color={tintColor} />,
-        tabBarColor: 'blue',
+        header: null,
       },
     },
-
-    Match: {
-      screen: Match,
-      navigationOptions: {
-        tabBarLabel: 'Match',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="burn" color={tintColor} />,
-        tabBarColor: 'pink',
-      },
-    },
-
-    Chats: {
-      screen: Groups,
-      navigationOptions: {
-        tabBarLabel: 'Chats',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="rocketchat" color={tintColor} />,
-        tabBarColor: 'green',
-      },
-    },
-
     User: {
       screen: User,
       navigationOptions: {
@@ -129,23 +227,61 @@ const AppNavigator = createStackNavigator(
         tabBarColor: 'orange',
       },
     },
-
-    Settings: {
-      screen: TestScreen('Settings'),
+    Match: {
+      screen: Match,
       navigationOptions: {
-        tabBarLabel: 'Settings',
-        tabBarIcon: ({ tintColor }) => <Icon size={20} name="cog" color={tintColor} />,
-        tabBarColor: 'violet',
+        tabBarLabel: 'Match',
+        tabBarIcon: ({ tintColor }) => <Icon size={20} name="burn" color={tintColor} />,
+        tabBarColor: 'pink',
       },
-    }, */
-    Main: { screen: MainScreenNavigator },
+    },
     Messages: { screen: Messages },
-    Profile: { screen: Profile },
+    Profile: {
+      screen: Profile,
+      navigationOptions: {
+        title: 'Profile',
+      },
+    },
+    GroupDetails: { screen: GroupDetails },
+    NewGroup: { screen: NewGroup },
+    FinalizeGroup: { screen: FinalizeGroup },
+    EditProfile: {
+      screen: EditProfile,
+      navigationOptions: {
+        title: 'Editar Perfil',
+      },
+    },
+    LifestyleResult: {
+      screen: LifestyleResult,
+      navigationOptions: {
+        title: 'Resultado de la Búsqueda',
+      },
+    },
+    Searches: {
+      screen: Searches,
+      navigationOptions: {
+        title: 'Búsquedas',
+      },
+    },
+    Notifications: {
+      screen: Notifications,
+      navigationOptions: {
+        title: 'Notifications',
+      },
+    },
+    Blacklist: {
+      screen: Blacklist,
+      navigationOptions: {
+        title: 'Blacklist',
+      },
+    },
+    GroupImage: { screen: GroupImage },
   },
   {
     navigationOptions: {
       title: 'Loveo',
     },
+    headerMode: 'screen',
   },
 );
 

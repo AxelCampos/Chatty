@@ -6,9 +6,10 @@ import { db } from './connectors';
 const GROUPS = 4;
 const USERS_PER_GROUP = 5;
 const MESSAGES_PER_USER = 5;
-const PHOTOS_PER_USER = 2;
+const PHOTOS_PER_USER = 8;
 const LIFESTYLE_PER_USER = 1;
 const ACTIVITY_PER_USER = 1;
+const SEARCH_PER_USER = 2;
 
 faker.seed(123); // get consistent data every time we reload app
 
@@ -44,6 +45,20 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
             city: faker.address.city(),
             username: faker.internet.userName(),
             age: faker.random.number({ min: 17, max: 90 }),
+            gender: faker.random.arrayElement(['no especificado', 'hombre', 'mujer', 'otro']),
+            civilStatus: faker.random.arrayElement([
+              'no especificado',
+              'soltero',
+              'separado',
+              'divorciado',
+              'viudo',
+              'otro',
+            ]),
+            children: faker.random.arrayElement([
+              'no especificado',
+              'no tiene hijos',
+              'tiene hijos',
+            ]),
             likes: faker.random.number(20),
             password: faker.internet.password(),
           });
@@ -70,12 +85,50 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
           R.times(
             () => db.models.lifestyle.create({
               userId: user.id,
-              gender: faker.random.number(2),
-              civilStatus: faker.random.number({ min: 0, max: 4 }),
-              nation: faker.random.arrayElement(['español', 'italiano', 'inglés']),
-              children: faker.random.number(2),
+              gender: faker.random.arrayElement(['no especificado', 'hombre', 'mujer', 'otro']),
+              civilStatus: faker.random.arrayElement([
+                'no especificado',
+                'soltero',
+                'separado',
+                'divorciado',
+                'viudo',
+                'otro',
+              ]),
+              nation: faker.random.arrayElement([
+                'no especificado',
+                'español',
+                'italiano',
+                'inglés',
+                'otro',
+              ]),
+              children: faker.random.arrayElement([
+                'no especificado',
+                'no tiene hijos',
+                'tiene hijos',
+              ]),
             }),
             LIFESTYLE_PER_USER,
+          );
+          R.times(
+            () => db.models.search.create({
+              userId: user.id,
+              name: faker.lorem.words(1),
+              gender: faker.random.arrayElement(['todos', 'hombre', 'mujer', 'otro']),
+              civilStatus: faker.random.arrayElement([
+                'todos',
+                'soltero',
+                'separado',
+                'divorciado',
+                'viudo',
+                'otro',
+              ]),
+              children: faker.random.arrayElement([
+                'todos',
+                'no tiene hijos',
+                'tiene hijos',
+              ]),
+            }),
+            SEARCH_PER_USER,
           );
           R.times(
             () => db.models.activity.create({

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ce2568',
+    backgroundColor: 'purple',
   },
   loginContainer: {
     alignItems: 'center',

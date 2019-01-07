@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  TouchableHighlight,
   Alert,
   Button,
   StyleSheet,
@@ -11,18 +11,18 @@ import {
   onButtonPress,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { withNavigation } from 'react-navigation';
 
 // create a component
 class LoginForm extends Component {
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={StyleSheet.container}>
-        <View style={styles.icon}>
-          <View style={styles.icons}>
-            <Icon size={25} name="user" color="white" />
-          </View>
+        <View style={styles.textIcon}>
+          <Icon size={18} style={styles.icons} name="user" color="white" />
           <TextInput
-            style={styles.container}
+            style={styles.input}
             autoCapitalize="none"
             onSubmitEditing={() => this.passwordInput.focus()}
             autoCorrect={false}
@@ -32,12 +32,10 @@ class LoginForm extends Component {
             placeholderTextColor="white"
           />
         </View>
-        <View style={styles.icon}>
-          <View style={styles.icons}>
-            <Icon size={25} name="lock" color="white" />
-          </View>
+        <View style={styles.textIcon}>
+          <Icon size={18} style={styles.icons} name="lock" color="white" />
           <TextInput
-            style={styles.container}
+            style={styles.input}
             returnKeyType="go"
             ref={input => (this.passwordInput = input)}
             placeholder="Password"
@@ -45,9 +43,9 @@ class LoginForm extends Component {
             secureTextEntry
           />
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onButtonPress}>
+        <TouchableHighlight style={styles.buttonContainer} onPress={() => navigate('User')}>
           <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -59,25 +57,28 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonContainer: {
-    backgroundColor: '#981fa3',
+    backgroundColor: '#c10bb7',
     paddingVertical: 15,
-    borderRadius: 50,
+    borderRadius: 40,
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
     fontWeight: '700',
   },
-  icon: {
-    flexDirection: 'row',
-    borderWidth: 0.5,
-    borderRadius: 50,
-    borderColor: 'white',
-    marginBottom: 5,
-  },
-  icons: {
-    marginTop: 10,
+  input: {
     marginLeft: 10,
   },
+  icons: {
+    marginTop: 15,
+    marginLeft: 20,
+  },
+  textIcon: {
+    flexDirection: 'row',
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginBottom: 10,
+  },
 });
-export default LoginForm;
+export default withNavigation(LoginForm);

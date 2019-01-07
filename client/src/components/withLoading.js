@@ -1,29 +1,25 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-  loading: {
-    justifyContent: 'center',
-    flex: 1,
-  },
-});
-export const WithLoading = Component => ({ loading = false, ...props }) => {
-  // render loading placeholder while we fetch
-  if (loading) {
-    return (
-      <View style={[styles.loading, styles.container]}>
-        <ActivityIndicator />
-      </View>
-    );
+import { ActivityIndicator } from 'react-native';
+import hoinstNonReactStatics from 'hoist-non-react-statics';
+function getDisplayName(WrappedComponent){
+  return WrappedComponent.displayName || WrappedComponent.name || 'Loading';
+}
+export const withLoading=(WrappedComponent)=>{
+  class Loading extends React.PureComponent{
+    render(){
+      const {loading}=this.props;
+      if (loading)return <ActivityIndicator size='small' color="white" />;
+      return <WrappedComponent{...this.props}/>;
+    }
   }
-  return <Component {...props} />;
+  Loading.propTypes={
+    loading: PropTypes.bool,
+  };
+
+  hoinstNonReactStatics(Loading, WrappedComponent);
+  Loading.displayName=`WithLoading(${getDisplayName(WrappedComponent)})`;
+  return Loading;
 };
-WithLoading.propTypes = {
-  loading: PropTypes.bool,
-};
-export default WithLoading;
+
+export default withLoading;

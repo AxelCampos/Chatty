@@ -1,6 +1,6 @@
 import GraphQLDate from 'graphql-date';
 import {
-  Group, Message, User, Photo, Lifestyle, Activity
+  Group, Message, User, Photo, Lifestyle, Activity, Search
 } from './connectors';
 
 export const resolvers = {
@@ -42,6 +42,11 @@ export const resolvers = {
         where: args,
       });
     },
+    searches(_, args) {
+      return Search.findAll({
+        where: args,
+      });
+    },
   },
   Mutation: {
     createMessage(
@@ -56,7 +61,149 @@ export const resolvers = {
         groupId,
       });
     },
+    async createConversation(
+      _,
+      {
+        group: { name, userIds, userId,photo },
+      },
+    ) {
+      const user = await User.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      const friend = await User.findOne({
+        where: {
+          id: userIds,
+        },
+      });
+      const group = await Group.create({
+        name,
+        photo,
+        users: [user, friend],
+      });
+      await group.addUsers([user, friend]);
+      return group;
+    },
+    async createGroup(
+      _,
+      {
+        group: { name, userIds, userId,photo},
+      },
+    ) {
+      const user = await User.findOne({ where: { id: userId } });
+      const friends = await user.getFriends({ where: { id: { $in: userIds } } });
+      const group = await Group.create({
+        name,
+        photo,
+        users: [user, ...friends],
+      });
+      await group.addUsers([user, ...friends]);
+      return group;
+    },
+    createSearch(
+      _,
+      {
+        search: { name, userId, gender, civilStatus, children },
+      },
+    ) {
+      const search = Search.create({
+        name,
+        userId,
+        gender,
+        civilStatus,
+        children,
+      });
+      return search;
+    },
+    async deleteGroup(_, { id }) {
+      const group = await Group.findOne({ where: id });
+      const users = await group.getUsers();
+      await group.removeUsers(users);
+      await Message.destroy({ where: { groupId: group.id } });
+      await group.destroy();
+      return group;
+    },
+    async deleteSearch(_, { id }) {
+      const search = await Search.findOne({ where: id });
+      await search.destroy();
+      return search;
+    },
+    async leaveGroup(_, { id, userId }) {
+      const group = await Group.findOne({ where: { id } });
+      await group.removeUser(userId);
+      const users = await group.getUsers();
+      if (!users.length) {
+        await Message.destroy({ where: { groupId: group.id } });
+        await group.destroy();
+      }
+      return group;
+    },
+    async updateUser(
+      _,
+      {
+        user: { id, likes },
+      },
+    ) {
+      const user = await User.findOne({ where: { id } }).then(user => user.update({ likes }));
+      return user;
+    },
+    updateGroup(
+      _,
+      {
+        group: { id, name, photo },
+      },
+    ) {
+      return Group.findOne({ where: { id } }).then(group => group.update({ name, photo }));
+    },
+
+    createUser(
+      _,
+      {
+        user: { username, email, password },
+      },
+    ) {
+      return User.create({
+        username,
+        email,
+        password,
+      });
+    },
+
+    editUser(
+      _,
+      {
+        user: {
+          id, username, country, city, email, age, gender, civilStatus, children, likes,
+        },
+      },
+    ) {
+      return User.findOne({ where: { id } }).then(user => user.update({
+        username,
+        country,
+        city,
+        email,
+        age,
+        gender,
+        civilStatus,
+        children,
+        likes,
+      }));
+    },
+    async editMiscreated(_, { id, userId }) {
+      const craco = await User.findOne({ where: { id: userId } });
+      const user = await User.findOne({ where: { id } });
+      await user.addMiscreated(craco);
+      return user;
+    },
+    async editFriend(_, { id, userId }) {
+      const friend = await User.findOne({ where: { id: userId } });
+      const user = await User.findOne({ where: { id } });
+      await user.addFriend(friend);
+      return user;
+    },
   },
+
   Group: {
     users(group) {
       return group.getUsers();
@@ -108,6 +255,14 @@ export const resolvers = {
     activities(user) {
       return user.getActivities();
     },
+    miscreated(user) {
+      return user.getMiscreated();
+    },
+    searches(user) {
+      return Search.findAll({
+        where: { userId: user.id },
+      });
+    },
   },
   Photo: {
     to(photo) {
@@ -125,6 +280,11 @@ export const resolvers = {
   Activity: {
     subscription(activity) {
       return activity.getUsers();
+    },
+  },
+  Search: {
+    userId(search) {
+      return search.getUser();
     },
   },
   /* To: {

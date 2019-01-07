@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  FlatList, StyleSheet, View, Image, Text, TouchableOpacity,
+} from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 import { graphql, compose } from 'react-apollo';
@@ -16,13 +18,40 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  titleWrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+  },
+  title: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleImage: {
+    marginRight: 6,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+  },
 });
 
 class Messages extends Component {
   static navigationOptions = ({ navigation }) => {
-    const { state } = navigation;
-    return {
+    
+    const { state, navigate } = navigation;
+    const goToGroupDetails = () => navigate('GroupDetails', {
+      id: state.params.groupId,
       title: state.params.title,
+    });
+    return {
+      headerTitle: (
+        <TouchableOpacity style={styles.titleWrapper} onPress={goToGroupDetails}>
+          <View style={styles.title}>
+            <Image style={styles.titleImage} source={{ uri: navigation.state.params.photo }} />
+            <Text>{state.params.title}</Text>
+          </View>
+        </TouchableOpacity>
+      ),
     };
   };
 
@@ -37,7 +66,6 @@ class Messages extends Component {
     this.state = {
       usernameColors,
     };
-    this.renderItem = this.renderItem.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -84,6 +112,10 @@ class Messages extends Component {
   render() {
     const { group } = this.props;
 
+    if (!group) {
+      return null;
+    }
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -103,6 +135,7 @@ class Messages extends Component {
 Messages.propTypes = {
   createMessage: PropTypes.func,
   navigation: PropTypes.shape({
+    navigate: PropTypes.func,
     state: PropTypes.shape({
       params: PropTypes.shape({
         groupId: PropTypes.number,
@@ -140,7 +173,7 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
           from: {
             __typename: 'User',
             id: 1,
-            username: 'Brook.Hudson',
+            username: 'Liza43',
           },
           to: {
             __typename: 'Group',
