@@ -13,6 +13,7 @@ module.exports = {
             "skipShapeProps": true
         }],
         "react/no-multi-comp": [0],
+        "import/no-named-as-default": 0,
         "no-bitwise": [0],
     },
 };

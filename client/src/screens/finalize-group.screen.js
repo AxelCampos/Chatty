@@ -89,13 +89,15 @@ class FinalizeGroup extends Component {
     const isReady = state.params && state.params.mode === 'ready';
     return {
       title: 'New Group',
-      headerRight: isReady ? (
-        <View style={{ paddingRight: 10 }}>
-          <Button title="Create" onPress={state.params.create} />
-        </View>
-      ) : (
-        undefined
-      ),
+      headerRight: isReady
+        ? (
+          <View style={{ paddingRight: 10 }}>
+            <Button title="Create" onPress={state.params.create} />
+          </View>
+        )
+        : (
+          undefined
+        ),
     };
   };
 
@@ -122,12 +124,7 @@ class FinalizeGroup extends Component {
     }
   }
 
-  pop() {
-    const { navigation } = this.props;
-    navigation.goBack();
-  }
-
-  remove=(user)=> {
+  remove = (user) => {
     const { selected } = this.state;
     const index = selected.indexOf(user);
     if (~index) {
@@ -137,22 +134,27 @@ class FinalizeGroup extends Component {
     }
   };
 
-  create=()=> {
+  create = () => {
     const { createGroup, navigation } = this.props;
     const { name, selected } = this.state;
     createGroup({
       name,
       userId: 1, // fake user for now
       userIds: R.map(R.prop('id'), selected),
-      photo: "http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg",
+      photo: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg',
     })
       .then((res) => {
         navigation.dispatch(goToNewGroup(res.data.createGroup));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
       });
   };
+
+  pop() {
+    const { navigation } = this.props;
+    navigation.goBack();
+  }
 
   refreshNavigation(ready) {
     const { navigation } = this.props;
@@ -170,7 +172,7 @@ class FinalizeGroup extends Component {
       <View style={styles.container}>
         <View style={styles.detailsContainer}>
           <TouchableOpacity style={styles.imageContainer}>
-            <Image style={styles.groupImage} source={{ uri: "http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg" }} />
+            <Image style={styles.groupImage} source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }} />
             <Text>edit</Text>
           </TouchableOpacity>
           <View style={styles.inputContainer}>

@@ -12,7 +12,18 @@ const EDIT_USER_MUTATION = gql`
             gender
             civilStatus
             children
-            likes
+            street
+            streetNumber
+            zipcode
+            birthdate
+            height
+            weight
+            education
+            profession
+            religion
+            pets
+            smoker
+            description
         }
     }
 `;

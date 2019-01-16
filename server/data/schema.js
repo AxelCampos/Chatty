@@ -35,6 +35,13 @@ export const typeDefs = gql`
     children: String
   }
 
+  input CreateNotificationInput {
+    type: String
+    text: String
+    firstUser: Int
+    secondUser: Int
+  }
+
   input UpdateGroupInput {
     id: Int!
     name: String
@@ -62,16 +69,53 @@ export const typeDefs = gql`
     gender: String
     civilStatus: String
     children: String
-    likes: Int
+    street: String
+    streetNumber: String
+    zipcode: String
+    birthdate: String
+    height: Int
+    weight: Int
+    education: String
+    profession: String
+    religion: String
+    pets: String
+    smoker: String
+    description: String
   }
-
+  #input for relay cursor connections
+  input ConnectionInput {
+    first: Int
+    after: String
+    last: Int
+    before: String
+  }
+  type MessageConnection {
+    edges: [MessageEdge]
+    pageInfo: PageInfo!
+  }
+  type MessageEdge {
+    cursor: String!
+    node: Message!
+  }
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+  type UserConnection {
+    edges: [UserEdge]
+    pageInfo: PageInfo!
+  }
+  type UserEdge {
+    cursor: String!
+    node: User!
+  }
   # a group chat entity
   type Group {
     id: Int! # unique id for the group
     name: String # name of the group
     users: [User!]! # users in the group
     photo: String
-    messages: [Message!]! # messages sent to the group
+    messages(messageConnection: ConnectionInput): MessageConnection # messages sent to the group
     album: [Photo!]!
     length: Int!
   }
@@ -87,6 +131,18 @@ export const typeDefs = gql`
     gender: String
     civilStatus: String
     children: String
+    street: String
+    streetNumber: String
+    zipcode: String
+    birthdate: String
+    height: Int
+    weight: Int
+    education: String
+    profession: String
+    religion: String
+    pets: String
+    smoker: String
+    description: String
     messages: [Message!]! # messages sent by user
     groups: [Group!]! # groups the user belongs to
     friends: [User] # user's friends/contacts
@@ -97,6 +153,7 @@ export const typeDefs = gql`
     activities: [Activity]
     miscreated: [User]
     searches: [Search]
+    notifications: [Notification]
   }
 
   #union To = User | Group
@@ -145,9 +202,19 @@ export const typeDefs = gql`
     children: String
   }
 
+  type Notification {
+    id: Int!
+    type: String
+    text: String
+    firstUser: User
+    secondUser: User
+    createAt: Date!
+  }
+
   # query for types
   type Query {
     users(email: String, id: Int): [User]
+    usersPage(userConnection: ConnectionInput): UserConnection
     # Return a user by their email or id
     user(email: String, id: Int): User
     # Return messages sent by a user via userId
@@ -162,6 +229,8 @@ export const typeDefs = gql`
     activities(id: Int, userId: Int): [Activity]
     # Return search
     searches(userId: Int): [Search]
+    # Return notifications
+    notifications(userId: Int): [Notification]
   }
 
   type Mutation {
@@ -170,6 +239,7 @@ export const typeDefs = gql`
     createConversation(group: CreateConversationInput!): Group
     createGroup(group: CreateGroupInput!): Group
     createSearch(search: CreateSearchInput!): Search
+    createNotification(notification: CreateNotificationInput): Notification
     deleteGroup(id: Int!): Group
     deleteSearch(id: Int!): Search
     leaveGroup(id: Int!, userId: Int!): Group
@@ -179,6 +249,8 @@ export const typeDefs = gql`
     editUser(user: EditUserInput!): User
     editMiscreated(id: Int, userId: Int): User
     editFriend(id: Int, userId: Int): User
+    deleteMiscreated(id: Int, userId: Int): User
+    deleteFriend(id: Int, userId: Int): User
   }
   schema {
     query: Query

@@ -26,6 +26,18 @@ const UserModel = db.define('user', {
   children: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
   likes: { type: Sequelize.STRING },
+  street: { type: Sequelize.STRING },
+  streetNumber: { type: Sequelize.STRING },
+  zipcode: { type: Sequelize.STRING },
+  birthdate: { type: Sequelize.STRING },
+  height: { type: Sequelize.INTEGER },
+  weight: { type: Sequelize.INTEGER },
+  education: { type: Sequelize.STRING },
+  profession: { type: Sequelize.STRING },
+  religion: { type: Sequelize.STRING },
+  pets: { type: Sequelize.STRING },
+  smoker: { type: Sequelize.STRING },
+  description: { type: Sequelize.STRING },
 });
 // define photos
 const PhotoModel = db.define('photo', {
@@ -50,6 +62,10 @@ const SearchModel = db.define('search', {
   civilStatus: { type: Sequelize.STRING },
   children: { type: Sequelize.STRING },
 });
+const NotificationModel = db.define('notification', {
+  text: { type: Sequelize.STRING },
+  type: { type: Sequelize.STRING },
+});
 
 // users belong to multiple groups
 UserModel.belongsToMany(GroupModel, { through: 'GroupUser' });
@@ -69,6 +85,7 @@ LifestyleModel.belongsTo(UserModel);
 ActivityModel.belongsToMany(UserModel, { through: 'ActivityUser' });
 UserModel.belongsToMany(ActivityModel, { through: 'ActivityUser' });
 SearchModel.belongsTo(UserModel);
+NotificationModel.belongsTo(UserModel);
 
 const Group = db.models.group;
 const Message = db.models.message;
@@ -77,7 +94,8 @@ const Photo = db.models.photo;
 const Lifestyle = db.models.lifestyle;
 const Activity = db.models.activity;
 const Search = db.models.search;
+const Notification = db.models.notification;
 
 export {
-  db, Group, Message, User, Photo, Lifestyle, Activity, Search,
+  db, Group, Message, User, Photo, Lifestyle, Activity, Search, Notification
 };

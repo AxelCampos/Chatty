@@ -82,12 +82,9 @@ Header.propTypes = {
 };
 
 class User extends Component {
-  static navigationOptions = ({ navigation }) => {
-    const { state, navigate } = navigation;
-    return {
-      title: 'Profile',
-    };
-  };
+  static navigationOptions = () => ({
+    title: 'Profile',
+  });
 
   constructor(props) {
     super(props);
@@ -102,12 +99,6 @@ class User extends Component {
     navigate('EditProfile', {
       userId: user.id,
     });
-  };
-
-  addLike = (likes) => {
-    console.log(likes);
-    likes++;
-    console.log(likes);
   };
 
   renderMenu() {

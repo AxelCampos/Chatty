@@ -43,8 +43,12 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
             email: faker.internet.email(),
             country: faker.address.country(),
             city: faker.address.city(),
+            street: faker.address.streetName(),
+            streetNumber: faker.address.streetSuffix(),
+            zipcode: faker.address.zipCode(),
+            city: faker.address.city(),
             username: faker.internet.userName(),
-            age: faker.random.number({ min: 17, max: 90 }),
+            age: faker.random.number({ min: 18, max: 90 }),
             gender: faker.random.arrayElement(['no especificado', 'hombre', 'mujer', 'otro']),
             civilStatus: faker.random.arrayElement([
               'no especificado',
@@ -61,6 +65,40 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
             ]),
             likes: faker.random.number(20),
             password: faker.internet.password(),
+            birthdate: faker.random.number(11111111, 99999999),
+            height: faker.random.number(150, 210),
+            weight: faker.random.number(45, 100),
+            education: faker.random.arrayElement([
+              'no especificado',
+              'secundario o inferior',
+              'modulo profesional',
+              'superior',
+              'posgrado o master',
+            ]),
+            profession: faker.lorem.word(1),
+            religion: faker.random.arrayElement([
+              'no especificado',
+              'cristiana',
+              'musulmane',
+              'judaica',
+              'induísta',
+              'budista',
+              'espiritualista',
+              'ateísta',
+              'otra',
+            ]),
+            pets: faker.random.arrayElement([
+              'no especificado',
+              'tengo',
+              'no tengo',
+            ]),
+            smoker: faker.random.arrayElement([
+              'no especificado',
+              'fumo',
+              'no fumo pero no me molesta',
+              'no fumo y me molesta',
+            ]),
+            description: faker.lorem.paragraph(1),
           });
           await Promise.all(
             R.times(
@@ -149,13 +187,16 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
   await Promise.all(
     R.flatten(
       R.map(
-        users => users.map((current, i) => users.map((user, j) => (i !== j ? current.addFriend(user) : false))),
+        users => users.map(
+          (current, i) => users.map((user, j) => (i !== j ? current.addFriend(user) : false)),
+        ),
         usersGroups,
       ),
     ),
   );
 
   console.log('¡DATABASE CREATED!');
+  return 'Este es un return para que eslint no se queje, porque no le mola una función async sin return, o algo asínc';
 };
 
 export default mockDB;

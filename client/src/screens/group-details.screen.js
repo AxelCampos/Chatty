@@ -87,13 +87,15 @@ class GroupDetails extends Component {
 
     return {
       title: `${navigation.state.params.title}`,
-      headerRight: isReady ? (
-        <View style={{ paddingRight: 10 }}>
-          <Button title="Edit" onPress={state.params.edit} />
-        </View>
-      ) : (
-        undefined
-      ),
+      headerRight: isReady
+        ? (
+          <View style={{ paddingRight: 10 }}>
+            <Button title="Edit" onPress={state.params.edit} />
+          </View>
+        )
+        : (
+          undefined
+        ),
     };
   };
 
@@ -102,13 +104,11 @@ class GroupDetails extends Component {
     const { group } = this.props;
     this.state = {
       groupName: group.name,
-      groupImage:group.photo,
     };
     this.edit = this.edit.bind(this);
   }
 
   componentDidMount() {
-    const { groupName } = this.state;
     this.refreshNavigation(false);
   }
 
@@ -123,7 +123,7 @@ class GroupDetails extends Component {
   keyExtractor = item => item.id.toString();
 
   renderItem = ({ item: user }) => (
-    <View style={styles.user}>{}
+    <View style={styles.user}>
       <Image style={styles.avatar} source={{ uri: user.photoprofile.url }} />
       <Text style={styles.username}>{user.username}</Text>
     </View>
@@ -153,24 +153,31 @@ class GroupDetails extends Component {
         console.log(e); // eslint-disable-line no-console
       });
   };
+
   pickGroupImage = () => {
-    const {group} = this.props;
-    const { 
-      navigation: {navigate},
+    const { group } = this.props;
+    const {
+      navigation: { navigate },
     } = this.props;
-      navigate('GroupImage',{group:group});
- };
-  
+    navigate('GroupImage', { group });
+  };
+
   edit = () => {
     const { groupName } = this.state;
-    const { updateGroup, group, navigation : { navigate, dispatch } } = this.props;
-  
+    const { updateGroup, group, navigation: { navigate, dispatch } } = this.props;
+
     updateGroup({
       id: group.id,
       name: groupName,
-      photo: group.photo
+      photo: group.photo,
     }).then((res) => {
       dispatch(navigate('Chats', res));
+    });
+  };
+
+  onNameChange = (text) => {
+    this.setState({
+      groupName: text,
     });
   };
 
@@ -184,14 +191,8 @@ class GroupDetails extends Component {
     });
   }
 
-  onNameChange = (text) => {
-    this.setState({
-      groupName: text,
-    });
-  };
-
   render() {
-    const { group, loading, navigation } = this.props;
+    const { group, loading } = this.props;
     const { groupName } = this.state;
     // render loading placeholder while we fetch messages
 
@@ -205,31 +206,40 @@ class GroupDetails extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.detailsContainer}>
-        {group.users.length > 2 ?
-          <TouchableOpacity style={styles.groupImageContainer} onPress={this.pickGroupImage}>
-          {group.photo == undefined ?
-            <Image style={styles.groupImage} source={{ uri: "http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg"}} />
-          : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
-            <Text>edit</Text>
-          </TouchableOpacity>:
-          <View style={styles.groupImageContainer}>
-          {group.photo == undefined ?
-            <Image style={styles.groupImage} source={{ uri: "http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg" }} />
-          : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
-          </View>
-        }
-        {group.users.length > 2 ? <View style={styles.groupNameBorder}>
-            <TextInput
-              style={styles.groupName}
-              placeholder={`${group.name}`}
-              value={groupName}
-              onChangeText={text => this.onNameChange(text)}
-            />
-          </View>:
-          <View style={styles.groupNameBorder}>
-          <Text style={styles.groupName}>{groupName}</Text>
-        </View>}
-          
+          {group.users.length > 2
+            ? (
+              <TouchableOpacity style={styles.groupImageContainer} onPress={this.pickGroupImage}>
+                {group.photo === undefined
+                  ? <Image style={styles.groupImage} source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }} />
+                  : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
+                <Text>edit</Text>
+              </TouchableOpacity>
+            )
+            : (
+              <View style={styles.groupImageContainer}>
+                {group.photo === undefined
+                  ? <Image style={styles.groupImage} source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }} />
+                  : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
+              </View>
+            )
+          }
+          {group.users.length > 2
+            ? (
+              <View style={styles.groupNameBorder}>
+                <TextInput
+                  style={styles.groupName}
+                  placeholder={`${group.name}`}
+                  value={groupName}
+                  onChangeText={text => this.onNameChange(text)}
+                />
+              </View>
+            )
+            : (
+              <View style={styles.groupNameBorder}>
+                <Text style={styles.groupName}>{groupName}</Text>
+              </View>
+            )}
+
         </View>
         <FlatList
           data={group.users}
@@ -258,7 +268,7 @@ GroupDetails.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    photo:PropTypes.string,
+    photo: PropTypes.string,
     users: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,

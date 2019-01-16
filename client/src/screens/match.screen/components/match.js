@@ -1,19 +1,11 @@
-import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   StyleSheet, Text, Alert, View, Image,
 } from 'react-native';
-import { graphql, compose } from 'react-apollo';
+
 import { StackActions, NavigationActions } from 'react-navigation';
 import Swiper from 'react-native-deck-swiper';
-import USER_QUERY from '../graphql/user.query';
-import USERS_QUERY from '../graphql/users.query';
-import CREATE_CONVERSATION_MUTATION from '../graphql/create-conversation.mutation';
-import UPDATE_USER_MUTATION from '../graphql/update-user.mutation';
-import EDIT_MISCREATED_MUTATION from '../graphql/edit-miscreated.mutation';
-import EDIT_FRIEND_MUTATION from '../graphql/edit-friend.mutation';
-import withLoading from '../components/withLoading';
 
 const styles = StyleSheet.create({
   container: {
@@ -73,6 +65,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 const goToNewGroup = group => StackActions.reset({
   index: 1,
   actions: [
@@ -83,12 +76,12 @@ const goToNewGroup = group => StackActions.reset({
     }),
   ],
 });
+
 class Match extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       swipedAllCards: false,
-      swipeDirection: '',
       isSwipingBack: false,
       cardIndex: 1,
     };
@@ -113,7 +106,8 @@ class Match extends PureComponent {
   };
 
   swipeBack = () => {
-    if (!this.state.isSwipingBack) {
+    const { isSwipingBack } = this.state;
+    if (!isSwipingBack) {
       this.setIsSwipingBack(true, () => {
         this.swiper.swipeBack(() => {
           this.setIsSwipingBack(false);
@@ -132,9 +126,9 @@ class Match extends PureComponent {
   };
 
   swipeRight = (index) => {
-    const { updateUser, editFriend } = this.props;
+    const { updateUser, editFriend, users } = this.props;
 
-    const user = this.props.users.sort(this.compareUsers)[index];
+    const user = users.sort(this.compareUsers)[index];
 
     updateUser({
       id: user.id,
@@ -145,13 +139,14 @@ class Match extends PureComponent {
       id: 1,
       userId: user.id,
     }).catch((error) => {
-      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => {} }]);
+      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => { } }]);
     });
   };
 
   swipeLeft = (index) => {
-    const { editMiscreated } = this.props;
-    const user = this.props.users.sort(this.compareUsers)[index];
+    const { editMiscreated, users } = this.props;
+
+    const user = users.sort(this.compareUsers)[index];
 
     editMiscreated({
       id: 1,
@@ -159,7 +154,7 @@ class Match extends PureComponent {
     });
   };
 
-  onSwiped = (index) => {
+  onSwiped = () => {
     const { cardIndex } = this.state;
     this.setState({
       cardIndex: cardIndex + 1,
@@ -167,14 +162,10 @@ class Match extends PureComponent {
   };
 
   compareUsers = (a, b) => a.id - b.id;
-  filter=()=>{
-    
-  }
-  create = (index) => {
-    const { createConversation, navigation } = this.props;
-    const { cardIndex } = this.state;
-    const user = this.props.users.sort(this.compareUsers)[index];
 
+  create = (index) => {
+    const { createConversation, navigation, users } = this.props;
+    const user = users.sort(this.compareUsers)[index];
 
     createConversation({
       name: user.username,
@@ -186,13 +177,13 @@ class Match extends PureComponent {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
       });
   };
 
   render = () => {
     const { users } = this.props;
-    const { swipedAllCards } = this.state;
+    const { swipedAllCards, cardIndex } = this.state;
 
     return (
       <View style={styles.container}>
@@ -201,7 +192,7 @@ class Match extends PureComponent {
             ref={(swiper) => {
               this.swiper = swiper;
             }}
-            cardIndex={this.state.cardIndex}
+            cardIndex={cardIndex}
             verticalSwipe={false}
             backgroundColor="white"
             onSwiped={this.onSwiped}
@@ -268,7 +259,7 @@ class Match extends PureComponent {
               width={85}
               name="email-outline"
               title="Swipe Left"
-              onPress={() => this.create(this.state.cardIndex)}
+              onPress={() => this.create(cardIndex)}
             />
             <Icon.Button
               underlayColor="transparent"
@@ -285,65 +276,5 @@ class Match extends PureComponent {
     );
   };
 }
-const userQuery = graphql(USER_QUERY, {
-  options: () => ({
-    variables: {
-      id: 1,
-    },
-  }),
-  props: ({ data: {loading, user } }) => ({
-    loading:loading,
-    user:user,
-  }),
-});
-const usersQuery = graphql(USERS_QUERY, {
-  options: () => ({}),
-  props: ({ data: { users } }) => ({
-    users: users || [],
-  }),
-});
-const createConversationMutation = graphql(CREATE_CONVERSATION_MUTATION, {
-  props: ({ mutate }) => ({
-    createConversation: (group) => 
-       mutate({
-        variables: { group },
-        refetchQueries: [{ query: USERS_QUERY }],
-      })
-  }),
-});
-const updateUserMutation = graphql(UPDATE_USER_MUTATION, {
-  props: ({ mutate }) => ({
-    updateUser: user => mutate({
-      variables: { user },
-    }),
-  }),
-});
-const editFriendMutation = graphql(EDIT_FRIEND_MUTATION, {
-  props: ({ mutate }) => ({
-    editFriend: (id, userId) => mutate({
-      variables: id,
-      userId,
-      refetchQueries:[{query:USER_QUERY}],
-    }),
-    
-  }),
-});
 
-const editMiscreatedMutation = graphql(EDIT_MISCREATED_MUTATION, {
-  props: ({ mutate }) => ({
-    editMiscreated: (id, userId) => mutate({
-      variables: id,
-      userId,
-    }),
-  }),
-});
-
-export default compose(
-  updateUserMutation,
-  createConversationMutation,
-  userQuery,
-  usersQuery,
-  withLoading,
-  editFriendMutation,
-  editMiscreatedMutation,
-)(Match);
+export default Match;
