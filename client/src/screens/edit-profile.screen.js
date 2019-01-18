@@ -11,6 +11,7 @@ import {
   Picker,
   ToastAndroid,
 } from 'react-native';
+import DatePicker from 'react-native-datepicker';
 import { graphql, compose } from 'react-apollo';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { USER_QUERY } from '../graphql/user.query';
@@ -151,6 +152,18 @@ const styles = StyleSheet.create({
     padding: 10,
     // color: '#7a42f4',
   },
+  datePicker: {
+    marginBottom: 15,
+    marginTop: 0,
+    marginLeft: 15,
+    marginRight: 8,
+    borderColor: '#9cb1b7',
+    height: 40,
+    borderRadius: 20,
+    padding: 10,
+    width: 200,
+    // color: '#7a42f4',
+  },
 });
 
 const Header = ({ goToProfile }) => (
@@ -185,6 +198,7 @@ class EditProfile extends Component {
       pets: user.pets,
       smoker: user.smoker,
       description: user.description,
+      date: "2000-01-01",
     };
   }
 
@@ -341,6 +355,31 @@ class EditProfile extends Component {
               autoCapitalize="none"
               placeholder='fecha de nacimiento'
               onChangeText={birthdate => this.setState({ birthdate })}
+            />
+
+            <DatePicker
+              style={styles.datePicker}
+              date={this.state.date}
+              mode="date"
+              placeholder="select date"
+              format="YYYY-MM-DD"
+              minDate="1920-01-01"
+              maxDate="2005-01-01"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  marginLeft: 36
+                }
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ date: date }) }}
             />
 
             <Text style={styles.label}>Altura (cm): {height}</Text>

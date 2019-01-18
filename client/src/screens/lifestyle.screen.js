@@ -8,7 +8,9 @@ import {
   ScrollView,
   Switch,
   ToastAndroid,
+  Slider,
 } from 'react-native';
+import RangeSlider from 'react-native-range-slider';
 import { graphql, compose } from 'react-apollo';
 import { USERS_QUERY } from '../graphql/users.query';
 import withLoading from '../components/withLoading';
@@ -79,6 +81,20 @@ const styles = StyleSheet.create({
     // color: '#7a42f4',
     width: 200,
   },
+  agePicker: {
+    flex: 0.8,
+    marginBottom: 15,
+    marginTop: 0,
+    marginLeft: 15,
+    marginRight: 15,
+    borderColor: '#9cb1b7',
+    height: 30,
+    borderRadius: 10,
+    padding: 3,
+    paddingLeft: 10,
+    // color: '#7a42f4',
+    width: 200,
+  },
   switch: {
     flex: 0.1,
   },
@@ -103,15 +119,21 @@ class Lifestyle extends Component {
       gender: 'todos',
       civilStatus: 'todos',
       children: 'todos',
+      minAge: 18,
+      maxAge: 100,
       switchGenderValue: false,
       switchCivilStatusValue: false,
       switchChildrenValue: false,
+      switchAgeValue: false,
       enabledpickerGender: false,
       enabledpickerCivilStatus: false,
       enabledpickerChildren: false,
+      enabledpickerAge: false,
       genderThumbcolor: 'red',
       civilStatusThumbcolor: 'red',
       childrenThumbcolor: 'red',
+      ageThumbcolor: 'red',
+
     };
   }
 
@@ -233,6 +255,34 @@ class Lifestyle extends Component {
     }
   };
 
+  switchAge = () => {
+    const { switchAgeValue } = this.state;
+    if (switchAgeValue) {
+      this.setState({
+        switchAgeValue: false,
+        enabledpickerAge: false,
+        ageThumbcolor: 'red',
+        minAge: 18,
+      });
+      ToastAndroid.showWithGravity(
+        'Busqueda por edad desativada.',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else {
+      this.setState({
+        switchAgeValue: true,
+        enabledpickerAge: true,
+        ageThumbcolor: 'blue',
+      });
+      ToastAndroid.showWithGravity(
+        'Busqueda por edad ativada.',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
+  };
+
   render() {
     const { users } = this.props;
     return (
@@ -304,6 +354,23 @@ class Lifestyle extends Component {
                 onValueChange={this.switchChildren}
                 value={this.state.switchChildrenValue}
                 thumbColor={this.state.childrenThumbcolor}
+              />
+            </View>
+            <Text style={styles.label}>Edad Mínima: </Text>
+            <View style={styles.viewSwitchPicker}>
+              <Slider
+                style={styles.agePicker}
+                step={1}
+                minimumValue={18}
+                maximumValue={100}
+                onValueChange={minAge => this.setState({ minAge })}
+                value={18}
+              />
+              <Switch
+                style={styles.switch}
+                onValueChange={this.switchAge}
+                value={this.state.switchAgeValue}
+                thumbColor={this.state.AgeThumbcolor}
               />
             </View>
           </ScrollView>
