@@ -1,98 +1,54 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
-
+import { View, Text, StyleSheet } from 'react-native';
 import { graphql, compose } from 'react-apollo';
-
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { USERS_QUERY } from '../graphql/users.query';
+import { USER_QUERY } from '../graphql/user.query';
 import withLoading from '../components/withLoading';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     flex: 1,
-  },
-  NearContainer: {
-    flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'yellow',
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    justifyContent: 'center',
   },
-  userName: {
-    fontWeight: 'bold',
-    flex: 0.7,
-  },
+  map: {
+    margin: 10,
+    height: 300,
+    width: 300,
+  }
 });
-const Near = ({ users: { id, username } }) => (
-  <TouchableHighlight key={id}>
-    <View style={styles.NearContainer}>
-      <Text style={styles.userName}>{username}</Text>
-    </View>
-  </TouchableHighlight>
-);
-Near.propTypes = {
-  users: PropTypes.shape({
-    id: PropTypes.number,
-    username: PropTypes.string,
-  }),
-};
-class Nearer extends Component {
-  /* static navigationOptions = {
-    title: '',
-  }; */
 
-  keyExtractor = item => item.id.toString();
+class Geolocation extends Component {
+  constructor(props) {
+    super(props);
 
-  renderItem = ({ item }) => <Near users={item} />;
+    this.state = {
+      region: {
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }
+    };
+  }
 
   render() {
-    const { users } = this.props;
-
     return (
-      <View>
-        <FlatList
-          data={users.slice().reverse()}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderItem}
+      <View style={styles.container}>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          initialRegion={this.state.region}
+          zoomEnabled={true}
         />
       </View>
     );
   }
 }
-Nearer.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
-  users: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      username: PropTypes.string.isRequired,
-      album: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired,
-        }),
-      ),
-    }),
-  ),
-};
-const usersQuery = graphql(USERS_QUERY, {
-  options: () => ({}), // fake the user for now
-  props: ({ data: { users } }) => ({
-    users: users || [],
-  }),
-});
 
 export default compose(
-  usersQuery,
+  //usersQuery,
   withLoading,
-)(Nearer);
+)(Geolocation);
