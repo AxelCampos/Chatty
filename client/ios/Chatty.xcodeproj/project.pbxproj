@@ -55,14 +55,14 @@
 		8A166507BED04979AA9DF244 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E925651B70B84853A6488BCB /* Octicons.ttf */; };
 		D639A024300B40038D8788F5 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6806D20734E5409F94DE31CC /* SimpleLineIcons.ttf */; };
 		083F191099DC4E4F9C1ABDD5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1346BA5E10284BB09AA76200 /* Zocial.ttf */; };
-<<<<<<< HEAD
-		60A410D861F44505AFBC1F8E /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6E6A44122B4685AA1BFBE1 /* libBVLinearGradient.a */; };
-		FE81A621978544C98C9322DD /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5CDCB5D620F4D14A252AF8E /* libReactNativeNavigation.a */; };
-		62DDF5B7BC1541C395CA276A /* ReactNativeNavigationTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 847270DD318D4547B075F4F3 /* ReactNativeNavigationTests.xctest */; };
-=======
 		0264218D3ECA48D18D5A7FC4 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD04478B20340428A0CE849 /* libReactNativeNavigation.a */; };
 		C0D0184BEA874AFCB164FAB5 /* ReactNativeNavigationTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 047AF12CD1AC4555AF28CCA9 /* ReactNativeNavigationTests.xctest */; };
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+		D0436853CF0E4250A332C901 /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D914F46CED4212B5C3F52A /* libRNCamera.a */; };
+		2E7F49C007584011A7EAA0F7 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6743852E1D6148A4BD0DEC61 /* libBVLinearGradient.a */; };
+		BE511B84F61A446F982DB52E /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCCB4EE8F1B54BEEAFC76374 /* libRNImagePicker.a */; };
+		134FED713B344C2F8FF800AC /* libRNImgToBase64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96ED9AEC674C4E3ABA0490C2 /* libRNImgToBase64.a */; };
+		4719D90E485F4E1AA20998C1 /* libRNGeocoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB69E0B46D4D46C1B14B5B57 /* libRNGeocoder.a */; };
+		C1FBC5D5800644CD9575F8ED /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A054B3D23F444EDB56071AB /* libAirMaps.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -388,17 +388,21 @@
 		E925651B70B84853A6488BCB /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		6806D20734E5409F94DE31CC /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		1346BA5E10284BB09AA76200 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-<<<<<<< HEAD
-		84280BB58EC4448B902F1F19 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		0E6E6A44122B4685AA1BFBE1 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		71E3BB8891F1478A9BF80C1B /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeNavigation.xcodeproj"; path = "../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		A5CDCB5D620F4D14A252AF8E /* libReactNativeNavigation.a */ = {isa = PBXFileReference; name = "libReactNativeNavigation.a"; path = "libReactNativeNavigation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		847270DD318D4547B075F4F3 /* ReactNativeNavigationTests.xctest */ = {isa = PBXFileReference; name = "ReactNativeNavigationTests.xctest"; path = "ReactNativeNavigationTests.xctest"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.cfbundle; explicitFileType = undefined; includeInIndex = 0; };
-=======
 		567BB4F520214B818DFB3291 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeNavigation.xcodeproj"; path = "../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		EAD04478B20340428A0CE849 /* libReactNativeNavigation.a */ = {isa = PBXFileReference; name = "libReactNativeNavigation.a"; path = "libReactNativeNavigation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		047AF12CD1AC4555AF28CCA9 /* ReactNativeNavigationTests.xctest */ = {isa = PBXFileReference; name = "ReactNativeNavigationTests.xctest"; path = "ReactNativeNavigationTests.xctest"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.cfbundle; explicitFileType = undefined; includeInIndex = 0; };
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+		60A9EE1FD8674758922A941A /* RNCamera.xcodeproj */ = {isa = PBXFileReference; name = "RNCamera.xcodeproj"; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		96D914F46CED4212B5C3F52A /* libRNCamera.a */ = {isa = PBXFileReference; name = "libRNCamera.a"; path = "libRNCamera.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		09AC5726634843BAA6783CD0 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6743852E1D6148A4BD0DEC61 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		1B5877D2460043A99D3C0477 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; name = "RNImagePicker.xcodeproj"; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		FCCB4EE8F1B54BEEAFC76374 /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D248B150EC054EEC8E969228 /* RNImgToBase64.xcodeproj */ = {isa = PBXFileReference; name = "RNImgToBase64.xcodeproj"; path = "../node_modules/react-native-image-base64/ios/RNImgToBase64.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		96ED9AEC674C4E3ABA0490C2 /* libRNImgToBase64.a */ = {isa = PBXFileReference; name = "libRNImgToBase64.a"; path = "libRNImgToBase64.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		311A481CFDEA43DBAA5A044B /* RNGeocoder.xcodeproj */ = {isa = PBXFileReference; name = "RNGeocoder.xcodeproj"; path = "../node_modules/react-native-geocoder/ios/RNGeocoder.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		CB69E0B46D4D46C1B14B5B57 /* libRNGeocoder.a */ = {isa = PBXFileReference; name = "libRNGeocoder.a"; path = "libRNGeocoder.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		3FA7C5C3083240D6AC0AB55E /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		2A054B3D23F444EDB56071AB /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,14 +432,14 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				31DAB4D16C2C4E83AEAE32C0 /* libReactNativeConfig.a in Frameworks */,
 				7899088DAB6D42BC8865445F /* libRNVectorIcons.a in Frameworks */,
-<<<<<<< HEAD
-				60A410D861F44505AFBC1F8E /* libBVLinearGradient.a in Frameworks */,
-				FE81A621978544C98C9322DD /* libReactNativeNavigation.a in Frameworks */,
-				62DDF5B7BC1541C395CA276A /* ReactNativeNavigationTests.xctest in Resources */,
-=======
 				0264218D3ECA48D18D5A7FC4 /* libReactNativeNavigation.a in Frameworks */,
 				C0D0184BEA874AFCB164FAB5 /* ReactNativeNavigationTests.xctest in Resources */,
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+				D0436853CF0E4250A332C901 /* libRNCamera.a in Frameworks */,
+				2E7F49C007584011A7EAA0F7 /* libBVLinearGradient.a in Frameworks */,
+				BE511B84F61A446F982DB52E /* libRNImagePicker.a in Frameworks */,
+				134FED713B344C2F8FF800AC /* libRNImgToBase64.a in Frameworks */,
+				4719D90E485F4E1AA20998C1 /* libRNGeocoder.a in Frameworks */,
+				C1FBC5D5800644CD9575F8ED /* libAirMaps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,12 +629,13 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				B7DA91885381429988486E2F /* ReactNativeConfig.xcodeproj */,
 				20909F081DD2433FA63CEB9E /* RNVectorIcons.xcodeproj */,
-<<<<<<< HEAD
-				84280BB58EC4448B902F1F19 /* BVLinearGradient.xcodeproj */,
-				71E3BB8891F1478A9BF80C1B /* ReactNativeNavigation.xcodeproj */,
-=======
 				567BB4F520214B818DFB3291 /* ReactNativeNavigation.xcodeproj */,
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+				60A9EE1FD8674758922A941A /* RNCamera.xcodeproj */,
+				09AC5726634843BAA6783CD0 /* BVLinearGradient.xcodeproj */,
+				1B5877D2460043A99D3C0477 /* RNImagePicker.xcodeproj */,
+				D248B150EC054EEC8E969228 /* RNImgToBase64.xcodeproj */,
+				311A481CFDEA43DBAA5A044B /* RNGeocoder.xcodeproj */,
+				3FA7C5C3083240D6AC0AB55E /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1302,20 +1307,24 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
-					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Debug;
@@ -1342,20 +1351,25 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Release;
@@ -1380,11 +1394,14 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Debug;
@@ -1408,11 +1425,13 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
-					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Release;
@@ -1447,20 +1466,24 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
-					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Debug;
@@ -1495,20 +1518,24 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
-					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Release;
@@ -1542,20 +1569,25 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Debug;
@@ -1589,20 +1621,24 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
-<<<<<<< HEAD
-					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
-=======
->>>>>>> c4eef47921aa77fd525d2481c7dce87d6056c146
 					"$(SRCROOT)/../node_modules/react-native-navigation/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
+					"$(SRCROOT)/../node_modules/react-native-geocoder/ios/RNGeocoder",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 				);
 			};
 			name = Release;

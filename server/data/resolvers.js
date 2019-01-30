@@ -1,7 +1,14 @@
 import GraphQLDate from 'graphql-date';
+import Sequelize from 'sequelize';
 import {
-  Group, Message, User, Photo, Lifestyle, Activity, Search, Notification
+  Group, Message, User, Photo, Lifestyle, Activity, Search, Notification,
 } from './connectors';
+import { withFilter, ForbiddenError } from 'apollo-server';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import configurationManager from '../configurationManager';
+const JWT_SECRET = configurationManager.jwt.secret;
+
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -32,31 +39,27 @@ export const resolvers = {
     usersPage(_, { userConnection = {} }) {
       const {
         first, last, before, after,
-      } = userConnection;
+      } = userConnection || { first: 8 };
 
-      const where = {};
 
-      // because we return messages from newest -> oldest
-      // before actually means newer (id > cursor)
-      // after actually means older (id < cursor)
+      let whereSQL = '';
+      const cursor = Buffer.from(before || after || '', 'base64').toString().split('patata');
+      const likes = cursor[0];
+      const id = cursor[1];
 
       if (before) {
         // convert base-64 to utf8 id
-        where.id = { $gt: Buffer.from(before, 'base64').toString() };
+        whereSQL = `CAST(likes AS integer) > ${likes} OR CAST(likes AS integer) = ${likes} AND id < ${id}`; // { $gt: Buffer.from(before, 'base64').toString() };
+      } else if (after) {
+        whereSQL = `CAST(likes AS integer) < ${likes} OR CAST(likes AS integer) = ${likes} AND id > ${id}`; // { $lt: Buffer.from(after, 'base64').toString() };
       }
-      if (after) {
-        where.id = { $lt: Buffer.from(after, 'base64').toString() };
-      }
-
       return User.findAll({
-
-        where,
-        order: [['id', 'DESC']],
+        where: Sequelize.literal(whereSQL),
+        order: Sequelize.literal('CAST(likes AS integer) DESC, id'),
         limit: first || last,
       }).then((users) => {
-        console.log('kadjiohf', userConnection);
         const edges = users.map(user => ({
-          cursor: Buffer.from(user.id.toString()).toString('base64'), // convert id to cursor
+          cursor: Buffer.from(`${user.likes.toString()}patata${user.id.toString()}`).toString('base64'), // FIXME: hace falta que el cursor incluya en un String id Y likes, porque hacen falta ambos pal orden
           node: user, // the node is the user itself
         }));
 
@@ -130,13 +133,22 @@ export const resolvers = {
     createMessage(
       _,
       {
-        message: { text, userId, groupId },
+        message: { text, groupId, userId },
       },
+      ctx,
     ) {
-      return Message.create({
-        userId,
-        text,
-        groupId,
+      if (!ctx.user) {
+        throw new ForbiddenError('Unauthorized');
+      }
+      return ctx.user.then((user) => {
+        if (!user) {
+          throw new ForbiddenError('Unauthorized');
+        }
+        return Message.create({
+          userId, //Cambiar esto por "userId: user.id" cuando tengamos autenticacion en cliente
+          text,
+          groupId,
+        });
       });
     },
     async createConversation(
@@ -203,7 +215,9 @@ export const resolvers = {
     createNotification(
       _,
       {
-        notification: { type, text, firstUser, secondUser, },
+        notification: {
+          type, text, firstUser, secondUser,
+        },
       },
     ) {
       return Message.create({
@@ -211,7 +225,6 @@ export const resolvers = {
         text,
         firstUser,
         secondUser,
-        createAt,
       });
     },
     async deleteGroup(_, { id }) {
@@ -243,7 +256,8 @@ export const resolvers = {
         user: { id, likes },
       },
     ) {
-      const user = await User.findOne({ where: { id } }).then(userFound => userFound.update({ likes }));
+      const user = await User.findOne({ where: { id } })
+        .then(userFound => userFound.update({ likes }));
       return user;
     },
     updateGroup(
@@ -252,7 +266,8 @@ export const resolvers = {
         group: { id, name, photo },
       },
     ) {
-      return Group.findOne({ where: { id } }).then(group => group.update({ name, photo }));
+      return Group.findOne({ where: { id } })
+        .then(group => group.update({ name, photo }));
     },
 
     createUser(
@@ -268,16 +283,31 @@ export const resolvers = {
       });
     },
 
+    async editPhotoprofile(
+      _,
+      {
+        photo: { userId, url, comment },
+      },
+    ) {
+      const userPhoto = await Photo.findOne({ where: { userId } }); // add profile: true to where, when photos profile work correctly
+      console.log('>>>>>>>>>>>>', userPhoto);
+      await userPhoto.update({ profile: true, url });
+      console.log('<<<<<<<<<<', userPhoto);
+
+      return userPhoto;
+    },
+
     editUser(
       _,
       {
         user: {
-          id, username, country, city, email, age, gender, civilStatus, children, street, streetNumber, zipcode, birthdate, height, weight, education, profession, religion, pets, smoker, description,
+          id, username, photoprofile, country, city, email, age, gender, civilStatus, children, street, streetNumber, zipcode, birthdate, height, weight, education, profession, religion, pets, smoker, description,
         },
       },
     ) {
       return User.findOne({ where: { id } }).then(user => user.update({
         username,
+        photoprofile,
         country,
         city,
         email,
@@ -324,6 +354,54 @@ export const resolvers = {
       const user = await User.findOne({ where: { id } });
       await user.removeFriend(friend);
       return user;
+    },
+    login(_, { email, password }, ctx) {
+      // find user by email
+      return User.findOne({ where: { email } }).then((user) => {
+        if (user) {
+          // validate password
+          return bcrypt.compare(password, user.password).then((res) => {
+            if (res) {
+              // create jwt
+              const token = jwt.sign(
+                {
+                  id: user.id,
+                  email: user.email,
+                },
+                JWT_SECRET,
+              );
+              ctx.user = Promise.resolve(user);
+              user.jwt = token; // eslint-disable-line no-param-reassign
+              return user;
+            }
+            return Promise.reject(new Error('password incorrect'));
+          });
+        }
+        return Promise.reject(new Error('email not found'));
+      });
+    },
+    signup(_, { email, password, username }, ctx) {
+      // find user by email
+      return User.findOne({ where: { email } }).then((existing) => {
+        if (!existing) {
+          // hash password and create user
+          return bcrypt
+            .hash(password, 10)
+            .then(hash => User.create({
+              email,
+              password: hash,
+              username: username || email,
+            }))
+            .then((user) => {
+              const { id } = user;
+              const token = jwt.sign({ id, email }, JWT_SECRET);
+              ctx.user = Promise.resolve(user);
+              user.jwt = token; // eslint-disable-line no-param-reassign
+              return user;
+            });
+        }
+        return Promise.reject(new Error('email already exists')); // email already exists
+      });
     },
   },
 

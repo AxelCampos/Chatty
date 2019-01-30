@@ -9,8 +9,8 @@ export const typeDefs = gql`
   # userId is the id of the user sending the message
   # groupId is the id of the group receiving the message
   input CreateMessageInput {
-    userId: Int!
     groupId: Int!
+    userId: Int!
     text: String!
   }
   input CreateConversationInput {
@@ -59,9 +59,16 @@ export const typeDefs = gql`
     likes: Int!
   }
 
+  input PhotoInput {
+    userId: Int!
+    url: String!
+    comment: String
+  }
+
   input EditUserInput {
     id: Int!
     username: String
+    photoprofile: PhotoInput
     country: String!
     city: String!
     email: String!
@@ -82,6 +89,7 @@ export const typeDefs = gql`
     smoker: String
     description: String
   }
+
   #input for relay cursor connections
   input ConnectionInput {
     first: Int
@@ -154,6 +162,7 @@ export const typeDefs = gql`
     miscreated: [User]
     searches: [Search]
     notifications: [Notification]
+    jwt: String
   }
 
   #union To = User | Group
@@ -167,6 +176,7 @@ export const typeDefs = gql`
     from: User!
     to: Group!
     comment: String
+    profile: Boolean!
   }
 
   # a message sent from a user to a group
@@ -249,8 +259,11 @@ export const typeDefs = gql`
     editUser(user: EditUserInput!): User
     editMiscreated(id: Int, userId: Int): User
     editFriend(id: Int, userId: Int): User
+    editPhotoprofile(photo: PhotoInput!): Photo
     deleteMiscreated(id: Int, userId: Int): User
     deleteFriend(id: Int, userId: Int): User
+    login(email: String!, password: String!): User
+    signup(email: String!, password: String!, username: String): User
   }
   schema {
     query: Query

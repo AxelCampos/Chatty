@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
-  StyleSheet, Text, TouchableHighlight, View,  Image,
+  StyleSheet, Text, TouchableHighlight, View, Image,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -38,7 +38,7 @@ const Group = ({ goToMessages, group: { id, name, photo } }) => (
   <TouchableHighlight key={id} onPress={goToMessages}>
     <View>
       <View style={styles.groupContainer}>
-        {photo !== null ? (
+        {photo ? (
           <Image style={styles.image} source={{ uri: photo }} />
         ) : (
           <Image

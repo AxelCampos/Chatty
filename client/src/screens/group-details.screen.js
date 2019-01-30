@@ -87,13 +87,11 @@ class GroupDetails extends Component {
 
     return {
       title: `${navigation.state.params.title}`,
-      headerRight: isReady
-        ? (
-          <View style={{ paddingRight: 10 }}>
-            <Button title="Edit" onPress={state.params.edit} />
-          </View>
-        )
-        : (
+      headerRight: isReady ? (
+        <View style={{ paddingRight: 10 }}>
+          <Button title="Edit" onPress={state.params.edit} />
+        </View>
+      ) : (
           undefined
         ),
     };
@@ -102,8 +100,9 @@ class GroupDetails extends Component {
   constructor(props) {
     super(props);
     const { group } = this.props;
+    const name = group ? group.name : '';
     this.state = {
-      groupName: group.name,
+      groupName: name,
     };
     this.edit = this.edit.bind(this);
   }
@@ -164,7 +163,11 @@ class GroupDetails extends Component {
 
   edit = () => {
     const { groupName } = this.state;
-    const { updateGroup, group, navigation: { navigate, dispatch } } = this.props;
+    const {
+      updateGroup,
+      group,
+      navigation: { navigate, dispatch },
+    } = this.props;
 
     updateGroup({
       id: group.id,
@@ -195,7 +198,6 @@ class GroupDetails extends Component {
     const { group, loading } = this.props;
     const { groupName } = this.state;
     // render loading placeholder while we fetch messages
-
     if (!group || loading) {
       return (
         <View style={[styles.loading, styles.container]}>
@@ -206,40 +208,48 @@ class GroupDetails extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.detailsContainer}>
-          {group.users.length > 2
-            ? (
-              <TouchableOpacity style={styles.groupImageContainer} onPress={this.pickGroupImage}>
-                {group.photo === undefined
-                  ? <Image style={styles.groupImage} source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }} />
-                  : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
-                <Text>edit</Text>
-              </TouchableOpacity>
-            )
-            : (
-              <View style={styles.groupImageContainer}>
-                {group.photo === undefined
-                  ? <Image style={styles.groupImage} source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }} />
-                  : <Image style={styles.groupImage} source={{ uri: group.photo }} />}
-              </View>
-            )
-          }
-          {group.users.length > 2
-            ? (
-              <View style={styles.groupNameBorder}>
-                <TextInput
-                  style={styles.groupName}
-                  placeholder={`${group.name}`}
-                  value={groupName}
-                  onChangeText={text => this.onNameChange(text)}
+          {group.users.length > 2 ? (
+            <TouchableOpacity style={styles.groupImageContainer} onPress={this.pickGroupImage}>
+              {!group.photo ? (
+                <Image
+                  style={styles.groupImage}
+                  source={{
+                    uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg',
+                  }}
                 />
+              ) : (
+                  <Image style={styles.groupImage} source={{ uri: group.photo }} />
+                )}
+              <Text>edit</Text>
+            </TouchableOpacity>
+          ) : (
+              <View style={styles.groupImageContainer}>
+                {group.photo === undefined ? (
+                  <Image
+                    style={styles.groupImage}
+                    source={{
+                      uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg',
+                    }}
+                  />
+                ) : (
+                    <Image style={styles.groupImage} source={{ uri: group.photo }} />
+                  )}
               </View>
-            )
-            : (
+            )}
+          {group.users.length > 2 ? (
+            <View style={styles.groupNameBorder}>
+              <TextInput
+                style={styles.groupName}
+                placeholder={`${group.name}`}
+                value={groupName}
+                onChangeText={text => this.onNameChange(text)}
+              />
+            </View>
+          ) : (
               <View style={styles.groupNameBorder}>
                 <Text style={styles.groupName}>{groupName}</Text>
               </View>
             )}
-
         </View>
         <FlatList
           data={group.users}

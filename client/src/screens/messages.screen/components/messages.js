@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import {
-  FlatList, StyleSheet, View, Image, Text, TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
@@ -38,6 +43,8 @@ class Messages extends Component {
       id: state.params.groupId,
       title: state.params.title,
     });
+    // FIXME: refactorizar: hacer un image component
+    // con la imagen como está en otros sitios y tirar de ahí
     return {
       headerTitle: (
         <TouchableOpacity style={styles.titleWrapper} onPress={goToGroupDetails}>
@@ -80,10 +87,26 @@ class Messages extends Component {
     }
   }
 
-  keyExtractor = item => item.id.toString();
+  keyExtractor = item => item.node.id.toString();
 
-  renderItem = ({ item: message }) => {
+  onEndReached = () => {
+    const { loadingMoreEntries } = this.state;
+    const { loadMoreEntries, group } = this.props;
+    if (!loadingMoreEntries && group.messages.pageInfo.hasNextPage) {
+      this.setState({
+        loadingMoreEntries: true,
+      });
+      loadMoreEntries().then(() => {
+        this.setState({
+          loadingMoreEntries: false,
+        });
+      });
+    }
+  };
+
+  renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
+    const message = edge.node;
     return (
       <Message
         color={usernameColors[message.from.username]}
@@ -100,7 +123,7 @@ class Messages extends Component {
       userId: 1,
       text,
     }).then(() => {
-      this.flatList.scrollToEnd({ animated: true });
+      this.flatList.scrollToIndex({ index: 0, animated: true });
     });
   };
 
@@ -117,10 +140,13 @@ class Messages extends Component {
           ref={(ref) => {
             this.flatList = ref;
           }}
-          data={group.messages.slice().reverse()}
+          inverted
+          data={group.messages.edges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ListEmptyComponent={<View />}
+          onEndReachedThreshold={0.1}
+          onEndReached={this.onEndReached}
         />
         <MessageInput send={this.send} />
       </View>
@@ -138,9 +164,21 @@ Messages.propTypes = {
     }),
   }),
   group: PropTypes.shape({
-    messages: PropTypes.array,
+    messages: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          cursor: PropTypes.string,
+          node: PropTypes.object,
+        }),
+      ),
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool,
+        hasPreviousPage: PropTypes.bool,
+      }),
+    }),
     users: PropTypes.array,
   }),
+  loadMoreEntries: PropTypes.func,
 };
 
 export default Messages;

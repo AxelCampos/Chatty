@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  FlatList, StyleSheet, View, 
+  FlatList, StyleSheet, View,
 } from 'react-native';
 import Tendency from './tendency';
 
@@ -14,7 +14,29 @@ const styles = StyleSheet.create({
 });
 
 class Tendencies extends Component {
-  keyExtractor = item => item.id.toString();
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadingMoreEntries: false,
+    };
+  }
+
+  onEndReached = () => {
+    const { loadingMoreEntries } = this.state;
+    const { loadMoreEntries, usersPage } = this.props;
+    if (!loadingMoreEntries && usersPage.pageInfo.hasNextPage) {
+      this.setState({
+        loadingMoreEntries: true,
+      });
+      loadMoreEntries().then(() => {
+        this.setState({
+          loadingMoreEntries: false,
+        });
+      });
+    }
+  };
+
+  keyExtractor = item => item.node.id.toString();
 
   goToProfiles = user => () => {
     const {
@@ -24,15 +46,16 @@ class Tendencies extends Component {
     navigate('Profile', { userId: user.id });
   };
 
-  renderItem = ({ item }) => (
-    <Tendency
-      users={item}
-      goToProfiles={this.goToProfiles(item)}
-      reduceString={this.reduceString}
-    />
-  );
-
-  compare = (a, b) => b.likes - a.likes;
+  renderItem = ({ item }) => {
+    const user = item.node;
+    return (
+      <Tendency
+        users={user}
+        goToProfiles={this.goToProfiles(user)}
+        reduceString={this.reduceString}
+      />
+    );
+  };
 
   reduceString = (a) => {
     let shortword = ' ';
@@ -48,16 +71,21 @@ class Tendencies extends Component {
     return shortword;
   };
 
-  render() {
-    const { users } = this.props;
+  compare = (a, b) => b.node.likes - a.node.likes;
 
+  render() {
+    const { usersPage } = this.props;
+    const data = usersPage.edges ? usersPage.edges.slice(0).sort(this.compare) : undefined;
     return (
       <View style={styles.container}>
         <FlatList
-          data={users.sort(this.compare).slice()}
+          data={data}
           numColumns={2}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          ListEmptyComponent={<View />}
+          onEndReachedThreshold={2}
+          onEndReached={this.onEndReached}
         />
       </View>
     );
@@ -81,5 +109,18 @@ Tendencies.propTypes = {
       }),
     }),
   ),
+  usersPage: PropTypes.shape({
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        cursor: PropTypes.string,
+        node: PropTypes.object,
+      }),
+    ),
+    pageInfo: PropTypes.shape({
+      hasNextPage: PropTypes.bool,
+      hasPreviousPage: PropTypes.bool,
+    }),
+  }),
+  loadMoreEntries: PropTypes.func,
 };
 export default Tendencies;

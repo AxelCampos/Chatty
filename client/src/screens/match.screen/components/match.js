@@ -139,7 +139,7 @@ class Match extends PureComponent {
       id: 1,
       userId: user.id,
     }).catch((error) => {
-      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => { } }]);
+      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => {} }]);
     });
   };
 
@@ -177,7 +177,7 @@ class Match extends PureComponent {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
       });
   };
 

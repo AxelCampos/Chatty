@@ -1,6 +1,7 @@
 import R from 'ramda';
 import faker from 'faker';
 import { db } from './connectors';
+import bcrypt from 'bcrypt';
 
 // create fake starter data
 const GROUPS = 4;
@@ -39,14 +40,45 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
     R.map(async (group) => {
       const users = await Promise.all(
         R.times(async () => {
+          const email = faker.internet.email();
+          const hash = await bcrypt.hash(email, 10);
           const user = await group.createUser({
-            email: faker.internet.email(),
-            country: faker.address.country(),
-            city: faker.address.city(),
+            email,
+            country: faker.random.arrayElement([
+              'España',
+            ]),
+            city: faker.random.arrayElement([
+              "Boadilla del Monte",
+              "Las Rozas",
+              "Majadahonda",
+              "Mostoles",
+              "Coslada",
+              "Alcobendas",
+              "Guadarrama",
+              "Madrid",
+              "Collado Villalba",
+              "Alcalá de Henares",
+              "San Sebastián de los Reyes",
+              "Pozuelo",
+              "Talavera de la Reina",
+              "Avila",
+              "Guadalajara",
+              "Navacerrada",
+              "Torrelodones",
+              "Alcorcón",
+              "Aranjuez",
+              "Arroyomolinos",
+              "Cercedilla",
+              "Colmenar Viejo",
+              "El Escorial",
+              "Galapagar",
+              "Lozoya",
+              "Manzanares el Real",
+            ]),
             street: faker.address.streetName(),
             streetNumber: faker.address.streetSuffix(),
             zipcode: faker.address.zipCode(),
-            city: faker.address.city(),
+            password: hash,
             username: faker.internet.userName(),
             age: faker.random.number({ min: 18, max: 90 }),
             gender: faker.random.arrayElement(['no especificado', 'hombre', 'mujer', 'otro']),
