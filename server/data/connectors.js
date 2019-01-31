@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 const db = new Sequelize('chatty', null, null, {
   dialect: 'sqlite',
   storage: './chatty.sqlite',
-  logging: false, // mark this true if you want to see logs
+  logging: true, // mark this true if you want to see logs
 });
 // define groups
 const GroupModel = db.define('group', {
@@ -26,12 +26,25 @@ const UserModel = db.define('user', {
   children: { type: Sequelize.STRING },
   password: { type: Sequelize.STRING },
   likes: { type: Sequelize.STRING },
+  street: { type: Sequelize.STRING },
+  streetNumber: { type: Sequelize.STRING },
+  zipcode: { type: Sequelize.STRING },
+  birthdate: { type: Sequelize.STRING },
+  height: { type: Sequelize.INTEGER },
+  weight: { type: Sequelize.INTEGER },
+  education: { type: Sequelize.STRING },
+  profession: { type: Sequelize.STRING },
+  religion: { type: Sequelize.STRING },
+  pets: { type: Sequelize.STRING },
+  smoker: { type: Sequelize.STRING },
+  description: { type: Sequelize.STRING },
 });
 // define photos
 const PhotoModel = db.define('photo', {
   url: { type: Sequelize.STRING },
   name: { type: Sequelize.STRING },
   comment: { type: Sequelize.STRING },
+  profile: { type: Sequelize.BOOLEAN },
 });
 // define lifestyle
 const LifestyleModel = db.define('lifestyle', {
@@ -49,6 +62,10 @@ const SearchModel = db.define('search', {
   gender: { type: Sequelize.STRING },
   civilStatus: { type: Sequelize.STRING },
   children: { type: Sequelize.STRING },
+});
+const NotificationModel = db.define('notification', {
+  text: { type: Sequelize.STRING },
+  type: { type: Sequelize.STRING },
 });
 
 // users belong to multiple groups
@@ -69,6 +86,7 @@ LifestyleModel.belongsTo(UserModel);
 ActivityModel.belongsToMany(UserModel, { through: 'ActivityUser' });
 UserModel.belongsToMany(ActivityModel, { through: 'ActivityUser' });
 SearchModel.belongsTo(UserModel);
+NotificationModel.belongsTo(UserModel);
 
 const Group = db.models.group;
 const Message = db.models.message;
@@ -77,7 +95,8 @@ const Photo = db.models.photo;
 const Lifestyle = db.models.lifestyle;
 const Activity = db.models.activity;
 const Search = db.models.search;
+const Notification = db.models.notification;
 
 export {
-  db, Group, Message, User, Photo, Lifestyle, Activity, Search,
+  db, Group, Message, User, Photo, Lifestyle, Activity, Search, Notification,
 };

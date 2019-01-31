@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import { NavigationActions, StackActions } from 'react-navigation';
 import React, { Component } from 'react';
 import {
-  TouchableHighlight, View, Text, StyleSheet, FlatList, Image,
+  TouchableHighlight, View, StyleSheet, FlatList, Image,
 } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import { USER_QUERY } from '../graphql/user.query';
@@ -47,16 +46,12 @@ Photo.propTypes = {
   }),
 };
 class GroupImage extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   selected = (url) => {
     const {
       navigation: { navigate, dispatch },
       updateGroup,
     } = this.props;
-    
+
 
     updateGroup({
       id: this.props.navigation.state.params.group.id,

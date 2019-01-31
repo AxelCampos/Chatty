@@ -1,26 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-  Image,
+  StyleSheet, Text, TouchableHighlight, View, Image,
 } from 'react-native';
 
-import { graphql, compose } from 'react-apollo';
-
-import { USERS_QUERY } from '../graphql/users.query';
-import withLoading from '../components/withLoading';
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
   tendencyContainer: {
     flex: 1,
     width: 160,
@@ -101,6 +86,7 @@ const Tendency = ({
 );
 Tendency.propTypes = {
   goToProfiles: PropTypes.func.isRequired,
+  reduceString: PropTypes.func.isRequired,
   users: PropTypes.shape({
     id: PropTypes.number,
     country: PropTypes.string,
@@ -114,85 +100,4 @@ Tendency.propTypes = {
     }),
   }),
 };
-
-class Tendencies extends Component {
-  keyExtractor = item => item.id.toString();
-
-  goToProfiles = user => () => {
-    const {
-      users,
-      navigation: { navigate },
-    } = this.props;
-
-    navigate('Profile', { userId: user.id });
-  };
-
-  renderItem = ({ item }) => (
-    <Tendency
-      users={item}
-      goToProfiles={this.goToProfiles(item)}
-      reduceString={this.reduceString}
-    />
-  );
-
-  compare = (a, b) => b.likes - a.likes;
-
-  reduceString = (a) => {
-    let shortword = ' ';
-
-    if (a.length >= 10) {
-      for (let i = 0; i < 10; i++) {
-        shortword += a.charAt(i);
-      }
-      shortword += '...';
-    } else {
-      shortword = a;
-    }
-    return shortword;
-  };
-
-  render() {
-    const { users } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={users.sort(this.compare).slice()}
-          numColumns={2}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderItem}
-        />
-      </View>
-    );
-  }
-}
-Tendencies.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
-  users: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      country: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-      age: PropTypes.number.isRequired,
-      likes: PropTypes.number.isRequired,
-      photoprofile: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-      }),
-    }),
-  ),
-};
-const usersQuery = graphql(USERS_QUERY, {
-  options: () => ({}), // fake the user for now
-  props: ({ data: { users } }) => ({
-    users: users || [],
-  }),
-});
-
-export default compose(
-  usersQuery,
-  withLoading,
-)(Tendencies);
+export default Tendency;

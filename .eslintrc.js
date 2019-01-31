@@ -11,7 +11,14 @@ module.exports = {
         skipShapeProps: true,
       },
     ],
-    'react/no-multi-comp': [0],
-    'no-bitwise': [0],
-  },
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "react/require-default-props": [0],
+        "react/no-unused-prop-types": [2, {
+            "skipShapeProps": true
+        }],
+        "react/no-multi-comp": [0],
+        "import/no-named-as-default": 0,
+        "no-bitwise": [0],
+    },
 };

@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import {
-  FlatList, StyleSheet, View, Image, Text, TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
-import { graphql, compose } from 'react-apollo';
-import Message from '../components/message.component';
-import GROUP_QUERY from '../graphql/group.query';
-import CREATE_MESSAGE_MUTATION from '../graphql/create-message.mutation';
-import withLoading from '../components/withLoading';
-import MessageInput from '../components/message-input.component';
+import Message from './message.component';
+import MessageInput from './message-input.component';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,12 +38,13 @@ const styles = StyleSheet.create({
 
 class Messages extends Component {
   static navigationOptions = ({ navigation }) => {
-    
     const { state, navigate } = navigation;
     const goToGroupDetails = () => navigate('GroupDetails', {
       id: state.params.groupId,
       title: state.params.title,
     });
+    // FIXME: refactorizar: hacer un image component
+    // con la imagen como está en otros sitios y tirar de ahí
     return {
       headerTitle: (
         <TouchableOpacity style={styles.titleWrapper} onPress={goToGroupDetails}>
@@ -85,10 +87,26 @@ class Messages extends Component {
     }
   }
 
-  keyExtractor = item => item.id.toString();
+  keyExtractor = item => item.node.id.toString();
 
-  renderItem = ({ item: message }) => {
+  onEndReached = () => {
+    const { loadingMoreEntries } = this.state;
+    const { loadMoreEntries, group } = this.props;
+    if (!loadingMoreEntries && group.messages.pageInfo.hasNextPage) {
+      this.setState({
+        loadingMoreEntries: true,
+      });
+      loadMoreEntries().then(() => {
+        this.setState({
+          loadingMoreEntries: false,
+        });
+      });
+    }
+  };
+
+  renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
+    const message = edge.node;
     return (
       <Message
         color={usernameColors[message.from.username]}
@@ -105,7 +123,7 @@ class Messages extends Component {
       userId: 1,
       text,
     }).then(() => {
-      this.flatList.scrollToEnd({ animated: true });
+      this.flatList.scrollToIndex({ index: 0, animated: true });
     });
   };
 
@@ -122,10 +140,13 @@ class Messages extends Component {
           ref={(ref) => {
             this.flatList = ref;
           }}
-          data={group.messages.slice().reverse()}
+          inverted
+          data={group.messages.edges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ListEmptyComponent={<View />}
+          onEndReachedThreshold={0.1}
+          onEndReached={this.onEndReached}
         />
         <MessageInput send={this.send} />
       </View>
@@ -143,68 +164,21 @@ Messages.propTypes = {
     }),
   }),
   group: PropTypes.shape({
-    messages: PropTypes.array,
+    messages: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          cursor: PropTypes.string,
+          node: PropTypes.object,
+        }),
+      ),
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool,
+        hasPreviousPage: PropTypes.bool,
+      }),
+    }),
     users: PropTypes.array,
   }),
+  loadMoreEntries: PropTypes.func,
 };
-const groupQuery = graphql(GROUP_QUERY, {
-  options: ownProps => ({
-    variables: {
-      groupId: ownProps.navigation.state.params.groupId,
-    },
-  }),
-  props: ({ data: { loading, group } }) => ({
-    loading,
-    group,
-  }),
-});
 
-const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
-  props: ({ mutate }) => ({
-    createMessage: message => mutate({
-      variables: { message },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        createMessage: {
-          __typename: 'Message',
-          id: -1,
-          text: message.text,
-          createdAt: new Date().toISOString(),
-          from: {
-            __typename: 'User',
-            id: 1,
-            username: 'Liza43',
-          },
-          to: {
-            __typename: 'Group',
-            id: message.groupId,
-          },
-        },
-      },
-      update: (store, { data: { createMessage } }) => {
-        // Read the data from our cache for this query
-        const groupData = store.readQuery({
-          query: GROUP_QUERY,
-          variables: {
-            groupId: message.groupId,
-          },
-        });
-          // Add our message from the mutation to the end
-        groupData.group.messages.unshift(createMessage);
-        // Write our data back to the cache.
-        store.writeQuery({
-          query: GROUP_QUERY,
-          variables: {
-            groupId: message.groupId,
-          },
-          data: groupData,
-        });
-      },
-    }),
-  }),
-});
-export default compose(
-  groupQuery,
-  withLoading,
-  createMessageMutation,
-)(Messages);
+export default Messages;

@@ -1,6 +1,7 @@
 import R from 'ramda';
 import faker from 'faker';
 import { db } from './connectors';
+import bcrypt from 'bcrypt';
 
 // create fake starter data
 const GROUPS = 4;
@@ -39,12 +40,47 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
     R.map(async (group) => {
       const users = await Promise.all(
         R.times(async () => {
+          const email = faker.internet.email();
+          const hash = await bcrypt.hash(email, 10);
           const user = await group.createUser({
-            email: faker.internet.email(),
-            country: faker.address.country(),
-            city: faker.address.city(),
+            email,
+            country: faker.random.arrayElement([
+              'España',
+            ]),
+            city: faker.random.arrayElement([
+              "Boadilla del Monte",
+              "Las Rozas",
+              "Majadahonda",
+              "Mostoles",
+              "Coslada",
+              "Alcobendas",
+              "Guadarrama",
+              "Madrid",
+              "Collado Villalba",
+              "Alcalá de Henares",
+              "San Sebastián de los Reyes",
+              "Pozuelo",
+              "Talavera de la Reina",
+              "Avila",
+              "Guadalajara",
+              "Navacerrada",
+              "Torrelodones",
+              "Alcorcón",
+              "Aranjuez",
+              "Arroyomolinos",
+              "Cercedilla",
+              "Colmenar Viejo",
+              "El Escorial",
+              "Galapagar",
+              "Lozoya",
+              "Manzanares el Real",
+            ]),
+            street: faker.address.streetName(),
+            streetNumber: faker.address.streetSuffix(),
+            zipcode: faker.address.zipCode(),
+            password: hash,
             username: faker.internet.userName(),
-            age: faker.random.number({ min: 17, max: 90 }),
+            age: faker.random.number({ min: 18, max: 90 }),
             gender: faker.random.arrayElement(['no especificado', 'hombre', 'mujer', 'otro']),
             civilStatus: faker.random.arrayElement([
               'no especificado',
@@ -61,6 +97,40 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
             ]),
             likes: faker.random.number(20),
             password: faker.internet.password(),
+            birthdate: faker.random.number(11111111, 99999999),
+            height: faker.random.number(150, 210),
+            weight: faker.random.number(45, 100),
+            education: faker.random.arrayElement([
+              'no especificado',
+              'secundario o inferior',
+              'modulo profesional',
+              'superior',
+              'posgrado o master',
+            ]),
+            profession: faker.lorem.word(1),
+            religion: faker.random.arrayElement([
+              'no especificado',
+              'cristiana',
+              'musulmane',
+              'judaica',
+              'induísta',
+              'budista',
+              'espiritualista',
+              'ateísta',
+              'otra',
+            ]),
+            pets: faker.random.arrayElement([
+              'no especificado',
+              'tengo',
+              'no tengo',
+            ]),
+            smoker: faker.random.arrayElement([
+              'no especificado',
+              'fumo',
+              'no fumo pero no me molesta',
+              'no fumo y me molesta',
+            ]),
+            description: faker.lorem.paragraph(1),
           });
           await Promise.all(
             R.times(
@@ -149,13 +219,16 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
   await Promise.all(
     R.flatten(
       R.map(
-        users => users.map((current, i) => users.map((user, j) => (i !== j ? current.addFriend(user) : false))),
+        users => users.map(
+          (current, i) => users.map((user, j) => (i !== j ? current.addFriend(user) : false)),
+        ),
         usersGroups,
       ),
     ),
   );
 
   console.log('¡DATABASE CREATED!');
+  return 'Este es un return para que eslint no se queje, porque no le mola una función async sin return, o algo asínc';
 };
 
 export default mockDB;

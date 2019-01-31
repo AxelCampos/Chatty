@@ -1,73 +1,13 @@
 import PropTypes from 'prop-types';
 import {
-  StyleSheet, View, Image, Text, Alert, ScrollView,
+  View, Image, Text, Alert, ScrollView,
 } from 'react-native';
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { graphql, compose } from 'react-apollo';
 import { StackActions, NavigationActions } from 'react-navigation';
-import withLoading from '../components/withLoading';
-import Menu from '../components/navigator-menu-component';
-import CREATE_CONVERSATION_MUTATION from '../graphql/create-conversation.mutation';
-import UPDATE_USER_MUTATION from '../graphql/update-user.mutation';
-import USER_QUERY from '../graphql/user.query';
-import EDIT_FRIEND_MUTATION from '../graphql/edit-friend.mutation';
+import Menu from '../../../components/navigator-menu-component';
+import styles from './styles';
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-  containerImage: {
-    alignItems: 'center',
-    height: 300,
-  },
-  userImage: {
-    height: 300,
-    width: 400,
-  },
-  userInformacion: {
-    alignItems: 'flex-start',
-    height: 150,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  userName: {
-    fontSize: 20,
-    color: 'black',
-  },
-  icons: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    position: 'absolute',
-    bottom: 20,
-    right: 30,
-  },
-  iconStyle: {
-    alignItems: 'center',
-    paddingStart: 9,
-    paddingEnd: 0,
-    width: 50,
-    borderWidth: 0.7,
-    marginHorizontal: 5,
-  },
-  locationUser: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  conexionStyle: {
-    marginTop: 3,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textStyle: {
-    marginHorizontal: 5,
-  },
-  menu: {
-    height: 550,
-    backgroundColor: 'white',
-  },
-});
 const goToNewGroup = group => StackActions.reset({
   index: 1,
   actions: [
@@ -112,7 +52,7 @@ class Profile extends Component {
       id: 1,
       userId: user.id,
     }).catch((error) => {
-      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => {} }]);
+      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => { } }]);
     });
   }
 
@@ -120,7 +60,7 @@ class Profile extends Component {
     const {
       createConversation,
       navigation,
-      user: { username, id, photoprofile},
+      user: { username, id, photoprofile },
     } = this.props;
 
     createConversation({
@@ -133,16 +73,17 @@ class Profile extends Component {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
       });
   }
 
   renderMenu() {
+    const { enableScrollViewScroll } = this.state;
     return (
       <View
         onStartShouldSetResponderCapture={() => {
           this.setState({ enableScrollViewScroll: false });
-          if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
+          if (this.myScroll.contentOffset === 0 && enableScrollViewScroll === false) {
             this.setState({ enableScrollViewScroll: true });
           }
         }}
@@ -154,9 +95,9 @@ class Profile extends Component {
   }
 
   render() {
-    const { user, navigation } = this.props;
-    const { switcher} = this.state;
-   
+    const { user } = this.props;
+    const { switcher, enableScrollViewScroll } = this.state;
+
     return (
       <View
         style={styles.container}
@@ -165,8 +106,8 @@ class Profile extends Component {
         }}
       >
         <ScrollView
-          scrollEnabled={this.state.enableScrollViewScroll}
-          ref={myScroll => (this._myScroll = myScroll)}
+          scrollEnabled={enableScrollViewScroll}
+          ref={(myScroll) => { this.myScroll = myScroll; }}
         >
           <View style={styles.containerImage}>
             <Image style={styles.userImage} source={{ uri: user.photoprofile.url }} />
@@ -188,7 +129,7 @@ class Profile extends Component {
               <Text style={styles.textStyle}>Ultima conexión: 13h</Text>
             </View>
             <View style={styles.icons}>
-              {switcher == false ? (
+              {switcher === false ? (
                 <Icon.Button
                   underlayColor="transparent"
                   style={styles.iconStyle}
@@ -232,6 +173,7 @@ class Profile extends Component {
 
 Profile.propTypes = {
   updateUser: PropTypes.func.isRequired,
+  editFriend: PropTypes.func.isRequired,
   createConversation: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     dispatch: PropTypes.func,
@@ -249,64 +191,5 @@ Profile.propTypes = {
     }),
   }),
 };
-const createConversationMutation = graphql(CREATE_CONVERSATION_MUTATION, {
-  props: ({ mutate }) => ({
-    createConversation: group => mutate({
-      variables: { group },
-      refetchQueries: [{ query: USER_QUERY }],
-    }),
-  }),
-});
-const updateUserMutation = graphql(UPDATE_USER_MUTATION, {
-  props: ({ mutate }) => ({
-    updateUser: user => mutate({
-      variables: { user },
 
-      update: (store, { data: { updateUser } }) => {
-        const data = store.readQuery({
-          query: USER_QUERY,
-          variables: {
-            id: user.id,
-          },
-        });
-        data.user.likes = updateUser.likes;
-
-        store.writeQuery({
-          query: USER_QUERY,
-          variables: {
-            id: user.id,
-          },
-          data,
-        });
-      },
-    }),
-  }),
-});
-const userQuery = graphql(USER_QUERY, {
-  options: ownProps => ({
-    variables: {
-      id: ownProps.navigation.state.params.userId,
-    },
-  }),
-  props: ({ data: { loading, user } }) => ({
-    loading,
-    user,
-  }),
-});
-const editFriendMutation = graphql(EDIT_FRIEND_MUTATION, {
-  props: ({ mutate }) => ({
-    editFriend: (id, userId) => mutate({
-      variables: id,
-      userId,
-      refetchQueries:[{query:USER_QUERY}],
-    }),
-  }),
-});
-
-export default compose(
-  userQuery,
-  withLoading,
-  createConversationMutation,
-  updateUserMutation,
-  editFriendMutation,
-)(Profile);
+export default Profile;
