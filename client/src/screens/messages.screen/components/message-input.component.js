@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TextInput, View } from 'react-native';
+import {
+  StyleSheet, TextInput, TouchableHighlight, View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Formik } from 'formik';
+import ImagePicker from 'react-native-image-picker';
+import ImgToBase64 from 'react-native-image-base64';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +42,43 @@ const styles = StyleSheet.create({
     marginRight: 0, // default is 12
   },
 });
+
+openImagepicker = () => {
+  const options = {
+    title: 'Send Photo',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+  // const { editPhotoprofile, user } = this.props;
+
+  ImagePicker.showImagePicker(options, async (response) => {
+    console.log('Response = ', response);
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else if (response.customButton) {
+      console.log('User tapped custom button: ', response.customButton);
+    }
+
+    await ImgToBase64.getBase64String(`${response.uri}`).then(res => this.setState({
+      image: res,
+    }))
+     .then(() => sendPhoto({ userId: user.id, url: `data:image/png;base64, ${this.state.image}` }))
+      .catch(err => console.log('error!!!', err));
+  });
+};
+
+const shareOptions = {
+  title: 'Title',
+  message: 'Message to share', // Note that according to the documentation at least one of "message" or "url" fields is required
+  url: 'www.example.com',
+  subject: 'Subject',
+};
+
 const sendButton = send => (
   <Icon.Button
     backgroundColor="blue"
@@ -52,7 +93,7 @@ const sendButton = send => (
 );
 const MessageInput = ({ send }) => (
   <Formik
-    initialValues={{ messageText: '' }}
+    initialValues={{ messageText: '', photo: url }}
     onSubmit={({ messageText }, { resetForm }) => {
       send(messageText);
       resetForm({});
@@ -72,6 +113,9 @@ const MessageInput = ({ send }) => (
           />
         </View>
         <View style={styles.sendButtonContainer}>{sendButton(handleSubmit)}</View>
+        <TouchableHighlight onPress={this.openImagepicker}>
+          <Icon style={styles.sendButtonContainer} size={27} name="camera" />
+        </TouchableHighlight>
       </View>
     )}
   </Formik>
