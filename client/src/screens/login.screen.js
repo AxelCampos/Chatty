@@ -2,10 +2,7 @@
 import {
   View, Text, StyleSheet, Image,
 } from 'react-native';
-import { NavigationActions } from 'react-navigation';
-
-import { graphql, compose } from 'react-apollo';
-import { connect } from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
 import LoginForm from '../components/loginForm';
 
 import { setCurrentUser } from '../actions/auth.actions';
