@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
   Alert,
   StyleSheet,
   ToastAndroid,
@@ -100,6 +101,7 @@ const createUserMutation = graphql(CREATE_USER_MUTATION, {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    position: 'absolute',
   },
   buttonContainer: {
     backgroundColor: '#c10bb7',
