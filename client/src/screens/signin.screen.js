@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  Button,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -16,28 +16,65 @@ import { NavigationActions } from 'react-navigation';
 
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { setCurrentUser } from '../actions/auth.actions';
 import LOGIN_MUTATION from '../graphql/login.mutation';
 import SIGNUP_MUTATION from '../graphql/signup.mutation';
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#bd30f4',
     paddingHorizontal: 50,
+  },
+  logo: {
+    marginBottom: 100,
+    marginLeft: 100,
+    width: 100,
+    height: 100,
   },
   inputContainer: {
     marginBottom: 20,
   },
+  button: {
+    flex: 0.1,
+    backgroundColor: '#982bf2',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '700',
+    marginTop: 5,
+    marginLeft: 125,
+  },
+  userInput: {
+    marginLeft: 25,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  inputIcon: {
+    marginTop: 17,
+  },
+  textoIcon: {
+    flexDirection: 'row',
+  },
+  texto: {
+    marginTop: 15,
+    marginLeft: 10,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '700',
+  },
   input: {
     height: 40,
-    borderRadius: 4,
+    borderRadius: 20,
     marginVertical: 6,
     padding: 6,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderWidth: 2,
+    borderColor: 'white',
+    color: 'white',
   },
   loadingContainer: {
     left: 0,
@@ -56,10 +93,12 @@ const styles = StyleSheet.create({
   },
   switchAction: {
     paddingHorizontal: 4,
-    color: 'blue',
+    color: '#02f747',
   },
   submit: {
     marginVertical: 6,
+    borderWidth: 2,
+    borderColor: '#17ed90',
   },
 });
 
@@ -81,6 +120,7 @@ class Signin extends Component {
     }
 
     this.state = {
+      newInput: 'a',
       view: 'login',
       email: 'kk@kk.es',
       password: '123',
@@ -95,9 +135,7 @@ class Signin extends Component {
 
   login = () => {
     const { email, password, view } = this.state;
-    console.log(email, password, 'kjsadfbasjjALDHJ');
     const { login, dispatch } = this.props;
-    console.log(login, 'assssssssssssssss');
 
     this.setState({
       loading: true,
@@ -157,14 +195,15 @@ class Signin extends Component {
   };
 
   switchView = () => {
-    const { view } = this.state;
+    const { view, newInput } = this.state;
     this.setState({
       view: view === 'signup' ? 'login' : 'signup',
+      newInput: newInput === 'b' ? 'a' : 'b',
     });
   };
 
   render() {
-    const { view, loading } = this.state;
+    const { view, newInput, loading } = this.state;
     const jwt = R.path(['auth', 'jwt'], this.props);
 
     return (
@@ -177,12 +216,39 @@ class Signin extends Component {
           undefined
         )}
         <View style={styles.inputContainer}>
+          <View>
+            {newInput === 'b' ? (
+              <View>
+                <View style={styles.textoIcon}>
+                  <Icon size={22} style={styles.inputIcon} name="user" color="white" />
+                  <Text style={styles.texto}>Introduce tu nombre de usuario</Text>
+                </View>
+                <TextInput
+                  defaultValue="default user"
+                  onChangeText={username => this.setState({ username })}
+                  placeholder="Username"
+                  style={styles.input}
+                />
+              </View>
+            ) : (
+              <Text />
+            )}
+          </View>
+          <View style={styles.textoIcon}>
+            <Icon size={22} style={styles.inputIcon} name="at" color="white" />
+            <Text style={styles.texto}>Introduce tu email</Text>
+          </View>
           <TextInput
             defaultValue="kk@kk.es"
             onChangeText={email => this.setState({ email })}
             placeholder="Email"
             style={styles.input}
           />
+          <View style={styles.textoIcon}>
+            <Icon size={22} style={styles.inputIcon} name="lock" color="white" />
+            <Text style={styles.texto}>Introduce tu contraseña</Text>
+          </View>
+
           <TextInput
             defaultValue="123"
             onChangeText={password => this.setState({ password })}
@@ -191,16 +257,16 @@ class Signin extends Component {
             style={styles.input}
           />
         </View>
-        <Button
-          onPress={this[view]}
-          style={styles.submit}
-          title={view === 'signup' ? 'Sign up' : 'Login'}
-          disabled={loading || !!jwt}
-        />
+        <TouchableOpacity onPress={this[view]} style={styles.button} disabled={loading || !!jwt}>
+          <Text style={styles.buttonText}>{view === 'signup' ? 'Sign Up' : 'Login'}</Text>
+        </TouchableOpacity>
         <View style={styles.switchContainer}>
           <Text>{view === 'signup' ? 'Already have an account?' : 'New to Chatty?'}</Text>
           <TouchableOpacity onPress={this.switchView}>
-            <Text style={styles.switchAction}>{view === 'login' ? 'Sign up' : 'Login'}</Text>
+            <Text style={styles.switchAction}>
+              {newInput === 'b'}
+              {view === 'login' ? 'Sign up' : 'Login'}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
