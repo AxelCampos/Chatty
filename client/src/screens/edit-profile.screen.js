@@ -210,7 +210,7 @@ class EditProfile extends Component {
         .then(res => this.setState({
           image: res,
         }))
-        .then(() => editPhotoprofile({ userId: user.id, url: this.state.image }))
+        .then(() => editPhotoprofile({ userId: user.id, url: `data:image/png;base64, ${this.state.image}` }))
         .catch(err => console.log('error!!!', err));
       alert('Foto actualizada');
     });
@@ -258,7 +258,7 @@ class EditProfile extends Component {
         <ScrollView style={styles.scroll}>
           <View style={styles.viewImage}>
             <TouchableHighlight onPress={this.openImagepicker}>
-              <Image style={styles.image} source={{ uri: `data:image/png;base64, ${photoprofile.url}` }} />
+              <Image style={styles.image} source={{ uri: photoprofile.url }} />
             </TouchableHighlight>
             <Text>Cambiar foto</Text>
           </View>

@@ -304,7 +304,8 @@ GroupDetails.propTypes = {
   updateGroup: PropTypes.func.isRequired,
 };
 const groupQuery = graphql(GROUP_QUERY, {
-  options: ownProps => ({ variables: { groupId: ownProps.navigation.state.params.id } }),
+  options: ownProps => (
+    { variables: { groupId: ownProps.navigation.state.params.id } }),
   props: ({ data: { loading, group } }) => ({
     loading,
     group,

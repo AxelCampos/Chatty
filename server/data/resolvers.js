@@ -133,10 +133,11 @@ export const resolvers = {
     createMessage(
       _,
       {
-        message: { text, groupId, userId },
+        message: { text, groupId },
       },
       ctx,
     ) {
+      console.log(ctx);
       if (!ctx.user) {
         throw new ForbiddenError('Unauthorized');
       }
@@ -145,7 +146,7 @@ export const resolvers = {
           throw new ForbiddenError('Unauthorized');
         }
         return Message.create({
-          userId, //Cambiar esto por "userId: user.id" cuando tengamos autenticacion en cliente
+          userId: user.id,
           text,
           groupId,
         });
@@ -357,6 +358,7 @@ export const resolvers = {
     },
     login(_, { email, password }, ctx) {
       // find user by email
+      console.log(">>>>>>>", email, password);
       return User.findOne({ where: { email } }).then((user) => {
         if (user) {
           // validate password
@@ -445,10 +447,12 @@ export const resolvers = {
           edges,
           pageInfo: {
             hasNextPage() {
+              if (!messages || !messages.length) {
+                return Promise.resolve(false);
+              }
               if (messages.length < (last || first)) {
                 return Promise.resolve(false);
               }
-
               return Message.findOne({
                 where: {
                   groupId: group.id,

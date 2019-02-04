@@ -22,21 +22,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  icons: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    position: 'absolute',
-    bottom: 20,
-    right: 30,
-  },
-  iconStyle: {
-    alignItems: 'center',
-    paddingStart: 9,
-    paddingEnd: 0,
-    width: 50,
-    borderWidth: 0.7,
-    marginHorizontal: 5,
-  },
   locationUser: {
     marginTop: 10,
     marginBottom: 10,
@@ -53,7 +38,7 @@ const styles = StyleSheet.create({
     height: 550,
     backgroundColor: 'white',
   },
-  header: {
+  currentUserIcons: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',

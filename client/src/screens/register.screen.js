@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+/* import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -90,4 +90,4 @@ const styles = StyleSheet.create({
     height: 50,
   },
 });
-export default Register;
+export default Register; */

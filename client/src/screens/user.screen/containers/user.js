@@ -2,7 +2,7 @@ import { graphql, compose } from 'react-apollo';
 
 import { USER_QUERY } from '../../../graphql/user.query';
 import withLoading from '../../../components/withLoading';
-import User from '../components/user';
+import Profile from '../../profile.screen/components/profile';
 
 const userQuery = graphql(USER_QUERY, {
   options: () => ({
@@ -18,4 +18,4 @@ const userQuery = graphql(USER_QUERY, {
 export default compose(
   userQuery,
   withLoading,
-)(User);
+)(Profile);

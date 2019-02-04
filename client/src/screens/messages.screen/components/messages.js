@@ -45,6 +45,7 @@ class Messages extends Component {
     });
     // FIXME: refactorizar: hacer un image component
     // con la imagen como está en otros sitios y tirar de ahí
+
     return {
       headerTitle: (
         <TouchableOpacity style={styles.titleWrapper} onPress={goToGroupDetails}>

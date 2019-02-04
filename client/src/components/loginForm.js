@@ -1,64 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View, Text, TextInput, TouchableHighlight, StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { withNavigation, StackActions, NavigationActions } from 'react-navigation';
-
-const goToMain = StackActions.reset({
-  index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Main' })],
-});
-// create a component
-class LoginForm extends Component {
-  goToMain = () => {
-    const {
-      navigation: { navigate, dispatch },
-    } = this.props;
-    dispatch(
-      StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Main' })],
-      }),
-    );
-  };
-
-  render() {
-    const { dispatch } = this.props.navigation;
-    return (
-      <View style={StyleSheet.container}>
-        <View style={styles.textIcon}>
-          <Icon size={18} style={styles.icons} name="user" color="white" />
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            onSubmitEditing={() => this.passwordInput.focus()}
-            autoCorrect={false}
-            keyBoardType="email-address"
-            returnKeyType="next"
-            placeholder="Enter your email or username"
-            placeholderTextColor="white"
-          />
-        </View>
-        <View style={styles.textIcon}>
-          <Icon size={18} style={styles.icons} name="lock" color="white" />
-          <TextInput
-            style={styles.input}
-            returnKeyType="go"
-            ref={input => (this.passwordInput = input)}
-            placeholder="Password"
-            placeholderTextColor="white"
-            secureTextEntry
-          />
-        </View>
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => dispatch(goToMain)}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}
-
+import { withNavigation } from 'react-navigation';
 // defining styles
 const styles = StyleSheet.create({
   container: {
@@ -89,4 +34,39 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+const LoginForm = login => (
+  <View style={StyleSheet.container}>
+    <View style={styles.textIcon}>
+      <Icon size={18} style={styles.icons} name="user" color="white" />
+      <TextInput
+        style={styles.input}
+        autoCapitalize="none"
+        onSubmitEditing={() => this.passwordInput.focus()}
+        autoCorrect={false}
+        keyBoardType="email-address"
+        returnKeyType="next"
+        placeholder="Enter your email or username"
+        placeholderTextColor="white"
+      />
+    </View>
+    <View style={styles.textIcon}>
+      <Icon size={18} style={styles.icons} name="lock" color="white" />
+      <TextInput
+        style={styles.input}
+        returnKeyType="go"
+        ref={input => (this.passwordInput = input)}
+        placeholder="Password"
+        placeholderTextColor="white"
+        secureTextEntry
+      />
+    </View>
+    <TouchableHighlight style={styles.buttonContainer} onPress={() => login}>
+      <Text style={styles.buttonText}>Login</Text>
+    </TouchableHighlight>
+  </View>
+);
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
 export default withNavigation(LoginForm);

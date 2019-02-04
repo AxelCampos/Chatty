@@ -11,7 +11,8 @@
     "apollo-cache-redux": "^0.1.2",
     "apollo-client": "^2.4.2",
     "apollo-link": "^1.2.3",
-    "apollo-link-error": "^1.1.1",
+    "apollo-link-context": "^1.0.12",
+    "apollo-link-error": "^1.1.5",
     "apollo-link-http": "^1.5.5",
     "apollo-link-redux": "^0.2.1",
     "buffer": "^5.2.1",
@@ -46,9 +47,11 @@
     "react-navigation": "2.18",
     "react-navigation-material-bottom-tabs": "^0.4.0",
     "react-navigation-redux-helpers": "^2.0.6",
+    "react-navigation-transitions": "^1.0.8",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
+    "redux-thunk": "^2.3.0",
     "scheduler": "^0.11.0"
   },
   "devDependencies": {

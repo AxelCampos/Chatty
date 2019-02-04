@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
   containerImage: {
     alignItems: 'center',
     height: 300,
+    marginBottom: 5,
   },
   userImage: {
     height: 300,
@@ -15,20 +16,24 @@ const styles = StyleSheet.create({
   },
   userInformacion: {
     alignItems: 'flex-start',
-    height: 150,
+    height: 230,
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
+  userNameContainer: {
+    flexDirection: 'row',
+    padding: 10,
+  },
   userName: {
-    fontSize: 20,
+    flex: 3,
+    fontSize: 30,
     color: 'black',
   },
   icons: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    position: 'absolute',
-    bottom: 20,
-    right: 30,
+    marginRight: 35,
   },
   iconStyle: {
     alignItems: 'center',
@@ -49,6 +54,26 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     marginHorizontal: 5,
+  },
+  album: {
+    paddingBottom: 100,
+  },
+  photoContainer: {
+    width: 100,
+    height: 100,
+    alignItems: 'center',
+    backgroundColor: '#F3E7E4',
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    margin: 3,
+  },
+  albumImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 5,
   },
   menu: {
     height: 550,
