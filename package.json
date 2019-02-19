@@ -40,6 +40,7 @@
     "jsonwebtoken": "^8.4.0",
     "ramda": "^0.25.0",
     "react-native-deck-swiper": "^1.5.22",
+    "redux-persist": "^5.10.0",
     "sequelize": "^4.39.0",
     "sqlite3": "^4.0.2"
   }

@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import {
-  FlatList, StyleSheet, View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import Tendency from './tendency';
-
 
 const styles = StyleSheet.create({
   container: {

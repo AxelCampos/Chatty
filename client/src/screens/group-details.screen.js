@@ -13,11 +13,16 @@ import {
 } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { connect } from 'react-redux';
 import GROUP_QUERY from '../graphql/group.query';
 import { USER_QUERY } from '../graphql/user.query';
 import DELETE_GROUP_MUTATION from '../graphql/delete-group.mutation';
 import LEAVE_GROUP_MUTATION from '../graphql/leave-group.mutation';
 import EDIT_GROUP_MUTATION from '../graphql/edit-group.mutation';
+
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
 const resetAction = StackActions.reset({
   index: 0,
@@ -92,8 +97,8 @@ class GroupDetails extends Component {
           <Button title="Edit" onPress={state.params.edit} />
         </View>
       ) : (
-          undefined
-        ),
+        undefined
+      ),
     };
   };
 
@@ -121,12 +126,15 @@ class GroupDetails extends Component {
 
   keyExtractor = item => item.id.toString();
 
-  renderItem = ({ item: user }) => (
-    <View style={styles.user}>
-      <Image style={styles.avatar} source={{ uri: user.photoprofile.url }} />
-      <Text style={styles.username}>{user.username}</Text>
-    </View>
-  );
+  renderItem = ({ item: user }) => {
+    const photo = user.photoprofile || {};
+    return (
+      <View style={styles.user}>
+        <Image style={styles.avatar} source={{ uri: photo.url }} />
+        <Text style={styles.username}>{user.username}</Text>
+      </View>
+    );
+  };
 
   deleteGroup = () => {
     const { deleteGroup, navigation } = this.props;
@@ -218,24 +226,24 @@ class GroupDetails extends Component {
                   }}
                 />
               ) : (
-                  <Image style={styles.groupImage} source={{ uri: group.photo }} />
-                )}
+                <Image style={styles.groupImage} source={{ uri: group.photo }} />
+              )}
               <Text>edit</Text>
             </TouchableOpacity>
           ) : (
-              <View style={styles.groupImageContainer}>
-                {group.photo === undefined ? (
-                  <Image
-                    style={styles.groupImage}
-                    source={{
-                      uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg',
-                    }}
-                  />
-                ) : (
-                    <Image style={styles.groupImage} source={{ uri: group.photo }} />
-                  )}
-              </View>
-            )}
+            <View style={styles.groupImageContainer}>
+              {group.photo === undefined ? (
+                <Image
+                  style={styles.groupImage}
+                  source={{
+                    uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg',
+                  }}
+                />
+              ) : (
+                <Image style={styles.groupImage} source={{ uri: group.photo }} />
+              )}
+            </View>
+          )}
           {group.users.length > 2 ? (
             <View style={styles.groupNameBorder}>
               <TextInput
@@ -246,10 +254,10 @@ class GroupDetails extends Component {
               />
             </View>
           ) : (
-              <View style={styles.groupNameBorder}>
-                <Text style={styles.groupName}>{groupName}</Text>
-              </View>
-            )}
+            <View style={styles.groupNameBorder}>
+              <Text style={styles.groupName}>{groupName}</Text>
+            </View>
+          )}
         </View>
         <FlatList
           data={group.users}
@@ -304,8 +312,7 @@ GroupDetails.propTypes = {
   updateGroup: PropTypes.func.isRequired,
 };
 const groupQuery = graphql(GROUP_QUERY, {
-  options: ownProps => (
-    { variables: { groupId: ownProps.navigation.state.params.id } }),
+  options: ownProps => ({ variables: { groupId: ownProps.navigation.state.params.id } }),
   props: ({ data: { loading, group } }) => ({
     loading,
     group,
@@ -320,18 +327,18 @@ const updateGroupMutation = graphql(EDIT_GROUP_MUTATION, {
   }),
 });
 const deleteGroupMutation = graphql(DELETE_GROUP_MUTATION, {
-  props: ({ mutate }) => ({
+  props: ({ mutate, ownProps }) => ({
     deleteGroup: id => mutate({
       variables: { id },
       update: (store, { data: { deleteGroup } }) => {
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: USER_QUERY, variables: { id: 1 } }); // fake for now
+        const data = store.readQuery({ query: USER_QUERY, variables: { id: ownProps.auth.id } }); // fake for now
         // Add our message from the mutation to the end.
         data.user.groups = data.user.groups.filter(g => deleteGroup.id !== g.id);
         // Write our data back to the cache.
         store.writeQuery({
           query: USER_QUERY,
-          variables: { id: 1 }, // fake for now
+          variables: { id: ownProps.auth.id }, // fake for now
           data,
         });
       },
@@ -339,18 +346,18 @@ const deleteGroupMutation = graphql(DELETE_GROUP_MUTATION, {
   }),
 });
 const leaveGroupMutation = graphql(LEAVE_GROUP_MUTATION, {
-  props: ({ mutate }) => ({
+  props: ({ mutate, ownProps }) => ({
     leaveGroup: ({ id, userId }) => mutate({
       variables: { id, userId },
       update: (store, { data: { leaveGroup } }) => {
         // Read the data from our cache for this query.
-        const data = store.readQuery({ query: USER_QUERY, variables: { id: 1 } }); // fake for now
+        const data = store.readQuery({ query: USER_QUERY, variables: { id: ownProps.auth.id } }); // fake for now
         // Add our message from the mutation to the end.
         data.user.groups = data.user.groups.filter(g => leaveGroup.id !== g.id);
         // Write our data back to the cache.
         store.writeQuery({
           query: USER_QUERY,
-          variables: { id: 1 }, // fake for now
+          variables: { id: ownProps.auth.id }, // fake for now
           data,
         });
       },
@@ -358,6 +365,7 @@ const leaveGroupMutation = graphql(LEAVE_GROUP_MUTATION, {
   }),
 });
 export default compose(
+  connect(mapStateToProps),
   updateGroupMutation,
   groupQuery,
   deleteGroupMutation,

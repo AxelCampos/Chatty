@@ -2,19 +2,19 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-  Image,
+  FlatList, StyleSheet, Text, TouchableHighlight, View, Image,
 } from 'react-native';
 
 import { graphql, compose } from 'react-apollo';
 
+import { connect } from 'react-redux';
 import { USERS_QUERY } from '../graphql/users.query';
 import { USER_QUERY } from '../graphql/user.query';
 import withLoading from '../components/withLoading';
+
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -77,28 +77,28 @@ const Tendency = ({
   goToProfiles,
   reduceString,
 }) => (
-    <TouchableHighlight key={id} onPress={goToProfiles} underlayColor="transparent">
-      <View style={styles.tendencyContainer}>
-        <Image style={styles.userImage} source={{ uri: photoprofile.url }} />
+  <TouchableHighlight key={id} onPress={goToProfiles} underlayColor="transparent">
+    <View style={styles.tendencyContainer}>
+      <Image style={styles.userImage} source={{ uri: photoprofile.url }} />
 
-        <Text style={styles.userName}>
-          {username}
+      <Text style={styles.userName}>
+        {username}
 
-          {', '}
-          {age}
-        </Text>
-        <Text style={styles.textLocation}>
-          {reduceString(city)}
-          {', '}
-          {reduceString(country)}
-        </Text>
-        <View style={styles.userLikes}>
-          <Icon size={12} name="heart" color="#F0625A" />
-          <Text style={styles.textLikes}>{likes}</Text>
-        </View>
+        {', '}
+        {age}
+      </Text>
+      <Text style={styles.textLocation}>
+        {reduceString(city)}
+        {', '}
+        {reduceString(country)}
+      </Text>
+      <View style={styles.userLikes}>
+        <Icon size={12} name="heart" color="#F0625A" />
+        <Text style={styles.textLikes}>{likes}</Text>
       </View>
-    </TouchableHighlight>
-  );
+    </View>
+  </TouchableHighlight>
+);
 /* Tendency.propTypes = {
     goToProfiles: PropTypes.func.isRequired,
     users: PropTypes.shape({
@@ -152,8 +152,8 @@ class MyLikes extends Component {
 
   selectFriends = (item) => {
     const { user } = this.props;
-    //console.log('user', user);
-    //console.log('item', item);
+    // console.log('user', user);
+    // console.log('item', item);
     return user.friends.filter(dato => dato.id === item.id).length !== 0;
   };
 
@@ -163,7 +163,10 @@ class MyLikes extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          data={users.filter(this.selectFriends).sort(this.compare).slice()}
+          data={users
+            .filter(this.selectFriends)
+            .sort(this.compare)
+            .slice()}
           numColumns={2}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
@@ -193,9 +196,9 @@ class MyLikes extends Component {
 }; */
 
 const userQuery = graphql(USER_QUERY, {
-  options: () => ({
+  options: ownProps => ({
     variables: {
-      id: 1,
+      id: ownProps.auth.id,
     },
   }),
   props: ({ data: { loading, user } }) => ({
@@ -212,6 +215,7 @@ const usersQuery = graphql(USERS_QUERY, {
 });
 
 export default compose(
+  connect(mapStateToProps),
   userQuery,
   usersQuery,
   withLoading,

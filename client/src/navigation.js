@@ -22,6 +22,7 @@ import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
+import { REHYDRATE } from 'redux-persist';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
@@ -46,7 +47,7 @@ import WhoLikesMe from './screens/who-likes-me.screen';
 import MatchList from './screens/match-list.screen';
 import Notifications from './screens/notifications.screen';
 import Blacklist from './screens/blacklist.screen';
-import Button from './components/button.screen';
+import { LOGOUT } from './constants/constants';
 import SigninScreen from './screens/signin.screen';
 
 const Search = createMaterialTopTabNavigator(
@@ -223,19 +224,36 @@ const AppNavigator = createSwitchNavigator(
   },
 );
 
-// reducer initialization code
-const initialState = AppNavigator.router.getStateForAction(
-  StackActions.reset({
-    index: 0,
-    actions: [
-      NavigationActions.navigate({
-        routeName: 'Main',
-      }),
-    ],
-  }),
-);
+
 export const navigationReducer = (state = null, action) => {
-  const nextState = AppNavigator.router.getStateForAction(action, state);
+  let nextState = AppNavigator.router.getStateForAction(action, state);
+
+  switch (action.type) {
+    case REHYDRATE:
+      // convert persisted data to Immutable and confirm rehydration
+      if (!action.payload || !action.payload.auth || !action.payload.auth.jwt) {
+        const { routes, index } = state;
+        if (routes[index].routeName !== 'Auth') {
+          nextState = AppNavigator.router.getStateForAction(
+            NavigationActions.navigate({ routeName: 'Auth' }),
+            state,
+          );
+        }
+      }
+      break;
+    case LOGOUT:
+      const { routes, index } = state;
+      if (routes[index].routeName !== 'Auth') {
+        nextState = AppNavigator.router.getStateForAction(
+          NavigationActions.navigate({ routeName: 'Auth' }),
+          state,
+        );
+      }
+      break;
+    default:
+      nextState = AppNavigator.router.getStateForAction(action, state);
+      break;
+  }
   // Simply return the original `state` if `nextState` is null or undefined.
   return nextState || state;
 };

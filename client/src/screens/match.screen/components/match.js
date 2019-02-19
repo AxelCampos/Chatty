@@ -126,7 +126,9 @@ class Match extends PureComponent {
   };
 
   swipeRight = (index) => {
-    const { updateUser, editFriend, users } = this.props;
+    const {
+      updateUser, editFriend, users, auth,
+    } = this.props;
 
     const user = users.sort(this.compareUsers)[index];
 
@@ -136,7 +138,7 @@ class Match extends PureComponent {
     });
 
     editFriend({
-      id: 1,
+      id: auth.id,
       userId: user.id,
     }).catch((error) => {
       Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => {} }]);
@@ -144,12 +146,12 @@ class Match extends PureComponent {
   };
 
   swipeLeft = (index) => {
-    const { editMiscreated, users } = this.props;
+    const { editMiscreated, users, auth } = this.props;
 
     const user = users.sort(this.compareUsers)[index];
 
     editMiscreated({
-      id: 1,
+      id: auth.id,
       userId: user.id,
     });
   };
@@ -164,13 +166,15 @@ class Match extends PureComponent {
   compareUsers = (a, b) => a.id - b.id;
 
   create = (index) => {
-    const { createConversation, navigation, users } = this.props;
+    const {
+      createConversation, navigation, users, auth,
+    } = this.props;
     const user = users.sort(this.compareUsers)[index];
 
     createConversation({
       name: user.username,
       userIds: user.id,
-      userId: 1,
+      userId: auth.id,
       photo: user.photoprofile.url,
     })
       .then((res) => {

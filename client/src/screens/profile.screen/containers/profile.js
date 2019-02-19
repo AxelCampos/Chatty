@@ -1,4 +1,3 @@
-
 import { graphql, compose } from 'react-apollo';
 import withLoading from '../../../components/withLoading';
 import CREATE_CONVERSATION_MUTATION from '../../../graphql/create-conversation.mutation';
@@ -6,6 +5,7 @@ import UPDATE_USER_MUTATION from '../../../graphql/update-user.mutation';
 import USER_QUERY from '../../../graphql/user.query';
 import EDIT_FRIEND_MUTATION from '../../../graphql/edit-friend.mutation';
 import Profile from '../components/profile';
+
 
 const createConversationMutation = graphql(CREATE_CONVERSATION_MUTATION, {
   props: ({ mutate }) => ({

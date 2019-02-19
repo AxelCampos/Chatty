@@ -258,7 +258,10 @@ class EditProfile extends Component {
         <ScrollView style={styles.scroll}>
           <View style={styles.viewImage}>
             <TouchableHighlight onPress={this.openImagepicker}>
-              <Image style={styles.image} source={{ uri: photoprofile.url }} />
+              <Image
+                style={styles.image}
+                source={{ uri: photoprofile ? photoprofile.url : '' }}
+              />
             </TouchableHighlight>
             <Text>Cambiar foto</Text>
           </View>

@@ -1,12 +1,13 @@
 import GraphQLDate from 'graphql-date';
 import Sequelize from 'sequelize';
-import {
-  Group, Message, User, Photo, Lifestyle, Activity, Search, Notification,
-} from './connectors';
 import { withFilter, ForbiddenError } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {
+  Group, Message, User, Photo, Lifestyle, Activity, Search, Notification,
+} from './connectors';
 import configurationManager from '../configurationManager';
+
 const JWT_SECRET = configurationManager.jwt.secret;
 
 
@@ -97,6 +98,9 @@ export const resolvers = {
       });
     },
     user(_, args) {
+      if (!args || !args.id) {
+        return {};
+      }
       return User.findOne({
         where: args,
       });
@@ -137,7 +141,6 @@ export const resolvers = {
       },
       ctx,
     ) {
-      console.log(ctx);
       if (!ctx.user) {
         throw new ForbiddenError('Unauthorized');
       }
@@ -277,11 +280,13 @@ export const resolvers = {
         user: { username, email, password },
       },
     ) {
-      return User.create({
+      const user = User.create({
         username,
         email,
         password,
       });
+      user.createPhoto({ url: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg', profile: true });
+      return user;
     },
 
     async editPhotoprofile(
@@ -291,10 +296,7 @@ export const resolvers = {
       },
     ) {
       const userPhoto = await Photo.findOne({ where: { userId } }); // add profile: true to where, when photos profile work correctly
-      console.log('>>>>>>>>>>>>', userPhoto);
       await userPhoto.update({ profile: true, url });
-      console.log('<<<<<<<<<<', userPhoto);
-
       return userPhoto;
     },
 
@@ -358,7 +360,6 @@ export const resolvers = {
     },
     login(_, { email, password }, ctx) {
       // find user by email
-      console.log(">>>>>>>", email, password);
       return User.findOne({ where: { email } }).then((user) => {
         if (user) {
           // validate password

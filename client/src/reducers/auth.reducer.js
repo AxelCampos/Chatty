@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist';
 import { LOGOUT, SET_CURRENT_USER } from '../constants/constants';
 
 const initialState = {
@@ -9,7 +10,13 @@ const auth = (state = initialState, action) => {
     case SET_CURRENT_USER:
       return { ...state, ...action.user };
     case LOGOUT:
-      return { loading: false };
+      return { loading: false, ...action.user };
+    case REHYDRATE:
+      if (!action.payload || !action.payload.auth || !action.payload.auth.jwt) {
+        return { state };
+      }
+      return { ...action.payload.auth, loading: false };
+
     default:
       return state;
   }

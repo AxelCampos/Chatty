@@ -12,13 +12,20 @@ import { onError } from 'apollo-link-error';
 import Config from 'react-native-config';
 import thunk from 'redux-thunk';
 import { setContext } from 'apollo-link-context';
-import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
+import { AsyncStorage } from 'react-native';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import { persistStore, persistCombineReducers } from 'redux-persist';
 import auth from './reducers/auth.reducer';
+import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
 
 const URL = Config.SERVER_URL;
-
+const config = {
+  key: 'root',
+  storage: AsyncStorage,
+  blacklist: ['nav', 'apollo'], // don't persist nav for now
+};
 const store = createStore(
-  combineReducers({
+  persistCombineReducers(config, {
     apollo: apolloReducer,
     nav: navigationReducer,
     auth,
@@ -50,11 +57,13 @@ export const client = new ApolloClient({
   link,
   cache,
 });
-
+const persistor = persistStore(store);
 const App = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <AppWithNavigationState />
+      <PersistGate persistor={persistor}>
+        <AppWithNavigationState />
+      </PersistGate>
     </Provider>
   </ApolloProvider>
 );

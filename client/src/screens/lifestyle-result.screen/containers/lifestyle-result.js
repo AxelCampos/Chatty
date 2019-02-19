@@ -1,4 +1,5 @@
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import { USER_QUERY } from '../../../graphql/user.query';
 import { USERS_QUERY } from '../../../graphql/users.query';
 import SEARCHES_QUERY from '../../../graphql/searches.query';
@@ -6,10 +7,14 @@ import CREATE_SEARCH_MUTATION from '../../../graphql/create-search.mutation';
 import { withLoading } from '../../../components/withLoading';
 import LifestyleResult from '../components/lifestyle-result';
 
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
 const userQuery = graphql(USER_QUERY, {
-  options: () => ({
+  options: ownProps => ({
     variables: {
-      id: 1,
+      id: ownProps.auth.id,
     },
   }),
   props: ({ data: { loading, user } }) => ({
@@ -41,7 +46,7 @@ const createSearchMutation = graphql(CREATE_SEARCH_MUTATION, {
   props: ({ mutate }) => ({
     createSearch: search => mutate({
       variables: { search },
-      refetchQueries: [{ query: SEARCHES_QUERY }]
+      refetchQueries: [{ query: SEARCHES_QUERY }],
       /* ,
   update: (store, { data: { searchGroup } }) => {
     // Read the data from our cache for this query.
@@ -60,6 +65,7 @@ const createSearchMutation = graphql(CREATE_SEARCH_MUTATION, {
 });
 
 export default compose(
+  connect(mapStateToProps),
   createSearchMutation,
   searchesQuery,
   userQuery,

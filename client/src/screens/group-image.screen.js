@@ -4,9 +4,14 @@ import {
   TouchableHighlight, View, StyleSheet, FlatList, Image,
 } from 'react-native';
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import { USER_QUERY } from '../graphql/user.query';
 import EDIT_GROUP_MUTATION from '../graphql/edit-group.mutation';
 import GROUP_QUERY from '../graphql/group.query';
+
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
 const styles = StyleSheet.create({
   albumContainer: {
@@ -51,7 +56,6 @@ class GroupImage extends Component {
       navigation: { navigate, dispatch },
       updateGroup,
     } = this.props;
-
 
     updateGroup({
       id: this.props.navigation.state.params.group.id,
@@ -102,9 +106,9 @@ GroupImage.propTypes = {
 };
 
 const userQuery = graphql(USER_QUERY, {
-  options: () => ({
+  options: ownProps => ({
     variables: {
-      id: 1,
+      id: ownProps.auth.id,
     },
   }),
 
@@ -132,6 +136,7 @@ const groupQuery = graphql(GROUP_QUERY, {
 });
 
 export default compose(
+  connect(mapStateToProps),
   userQuery,
   updateGroupMutation,
   groupQuery,

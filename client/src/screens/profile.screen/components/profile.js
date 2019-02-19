@@ -26,7 +26,6 @@ class Profile extends Component {
     super(props);
     this.state = {
       enableScrollViewScroll: true,
-      switcher: false,
     };
     this.create = this.create.bind(this);
     this.addLike = this.addLike.bind(this);
@@ -41,10 +40,20 @@ class Profile extends Component {
       underlayColor="transparent"
     >
       <View style={styles.photoContainer}>
-        <Image source={{ uri: item.url }} style={styles.albumImage} />
+        <Image source={{ uri: item ? item.url : undefined }} style={styles.albumImage} />
       </View>
     </TouchableHighlight>
   );
+
+  goTosettings = () => {
+    const {
+      navigation: { navigate },
+      auth,
+    } = this.props;
+    navigate('EditProfile', {
+      userId: auth.id,
+    });
+  };
 
   addLike() {
     const { updateUser, user, editFriend } = this.props;
@@ -73,7 +82,7 @@ class Profile extends Component {
       name: username,
       userIds: id,
       userId: 1,
-      photo: photoprofile.url,
+      photo: photoprofile ? photoprofile.url : undefined,
     })
       .then((res) => {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
@@ -83,23 +92,14 @@ class Profile extends Component {
       });
   }
 
-  goTosettings = () => {
-    const {
-      navigation: { navigate },
-      user,
-    } = this.props;
-    navigate('EditProfile', {
-      userId: user.id,
-    });
-  };
-
   render() {
     const {
+      auth,
       user,
       navigation: { navigate },
     } = this.props;
-    const { enableScrollViewScroll, img = user.photoprofile } = this.state;
-    console.log('image: ', img);
+    const profileUser = user || auth || {};
+    const { enableScrollViewScroll, img = profileUser.photoprofile } = this.state;
     return (
       <View
         style={styles.container}
@@ -108,8 +108,8 @@ class Profile extends Component {
         }}
       >
         <View style={styles.userNameContainer}>
-          <Text style={styles.userName}>{user.username}</Text>
-          {user.id === 1 ? (
+          <Text style={styles.userName}>{profileUser.username}</Text>
+          {auth && profileUser.id === auth.id ? (
             <CurrentUserIcons
               settings={this.goTosettings}
               setImage={newImage => this.setState({ img: `data:image/jpeg;base64,${newImage}` })}
@@ -125,11 +125,11 @@ class Profile extends Component {
           }}
         >
           <View style={styles.containerImage}>
-            <Image style={styles.userImage} source={{ uri: img.url }} />
+            <Image style={styles.userImage} source={{ uri: img ? img.url : undefined }} />
           </View>
           <FlatList
             styles={styles.album}
-            data={user.album}
+            data={profileUser.album}
             keyExtractor={this.keyExtractor}
             renderItem={this.renderItem}
             ListEmptyComponent={<View />}
@@ -138,7 +138,7 @@ class Profile extends Component {
           <View style={styles.userInformacion}>
             <View style={styles.conexionStyle}>
               <Icon size={11.5} name="home-circle" />
-              <Text style={[styles.locationUser, styles.textStyle]}>{user.city}</Text>
+              <Text style={[styles.locationUser, styles.textStyle]}>{profileUser.city}</Text>
             </View>
             <View style={styles.conexionStyle}>
               <Icon size={10} name="circle" color="green" />
@@ -147,7 +147,7 @@ class Profile extends Component {
             <Text>Aquí iría una patata o lo que cohone queráis</Text>
           </View>
         </ScrollView>
-        {user.id === 1 ? (
+        {auth && profileUser.id === auth.id ? (
           <ActionButton
             btnOutRange="rgba(208, 170, 230,1)"
             buttonColor="rgba(185, 104, 233,1)"

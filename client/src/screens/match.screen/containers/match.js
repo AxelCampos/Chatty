@@ -1,20 +1,24 @@
 import { graphql, compose } from 'react-apollo';
 
+
 import USER_QUERY from '../../../graphql/user.query';
 import USERS_QUERY from '../../../graphql/users.query';
 import CREATE_CONVERSATION_MUTATION from '../../../graphql/create-conversation.mutation';
 import UPDATE_USER_MUTATION from '../../../graphql/update-user.mutation';
 import EDIT_FRIEND_MUTATION from '../../../graphql/edit-friend.mutation';
 import EDIT_MISCREATED_MUTATION from '../../../graphql/edit-miscreated.mutation';
-
 import { withLoading } from '../../../components/withLoading';
 
 import Match from '../components/match';
+import { connect } from 'react-redux';
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
 const userQuery = graphql(USER_QUERY, {
-  options: () => ({
+  options: ownProps => ({
     variables: {
-      id: 1,
+      id: ownProps.auth.id,
     },
   }),
   props: ({ data: { loading, user } }) => ({
@@ -63,6 +67,7 @@ const editMiscreatedMutation = graphql(EDIT_MISCREATED_MUTATION, {
 });
 
 export default compose(
+  connect(mapStateToProps),
   updateUserMutation,
   createConversationMutation,
   userQuery,

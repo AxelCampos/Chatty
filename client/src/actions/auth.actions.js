@@ -8,5 +8,5 @@ export const setCurrentUser = user => ({
 
 export const logout = () => {
   client.resetStore();
-  return { type: LOGOUT };
+  return { type: LOGOUT, user: {} };
 };

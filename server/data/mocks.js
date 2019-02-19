@@ -67,8 +67,6 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
               "Aranjuez",
               "Arroyomolinos",
               "Cercedilla",
-              "Avila",
-              "Guadalajara",
               "Colmenar Viejo",
               "San Lorenzo de El Escorial",
               "Galapagar",

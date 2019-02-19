@@ -69,10 +69,10 @@ export const typeDefs = gql`
     id: Int!
     username: String
     photoprofile: PhotoInput
-    country: String!
-    city: String!
-    email: String!
-    age: Int!
+    country: String
+    city: String
+    email: String
+    age: Int
     gender: String
     civilStatus: String
     children: String
@@ -131,11 +131,11 @@ export const typeDefs = gql`
   # a user -- keep type really simple for now
   type User {
     id: Int! # unique id for the user
-    country: String!
-    city: String!
+    country: String
+    city: String
     email: String! # we will also require a unique email per user
     username: String! # this is the name we'll show other users
-    age: Int!
+    age: Int
     gender: String
     civilStatus: String
     children: String

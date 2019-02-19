@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import {
-  StyleSheet, View, Text, TouchableHighlight,
+  StyleSheet, View, Text, TouchableHighlight, Button,
 } from 'react-native';
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { logout } from '../actions/auth.actions';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,18 +44,19 @@ const styles = StyleSheet.create({
   },
 });
 
-// no sé qué es esto ni qué hace aquí D: porfa cuando dejéis cosas así por ahí comentad por qué
-onPress = () => {
-  const { count } = this.state;
-  this.setState({
-    count: count + 1,
-  });
-};
-
 class Settings extends Component {
   static navigationOptions = {
     title: 'Menu',
   };
+
+  logout() {
+    const {
+      navigation: { dispatch, navigate },
+    } = this.props;
+
+    dispatch(logout());
+    navigate('Auth');
+  }
 
   render() {
     return (
@@ -62,31 +64,19 @@ class Settings extends Component {
         <View style={styles.screenMenu}>
           <Icon size={40} name="cogs" color="lightgreen" />
           <Text>Welcome to the menu</Text>
-
         </View>
         <View style={styles.textContainer}>
           <Icon style={styles.icon} size={15} name="user-circle" color="white" />
           <Text style={styles.menuText}>Your Account: </Text>
         </View>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Account </Text>
         </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Privacity </Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}>
-
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> About </Text>
         </TouchableHighlight>
 
@@ -94,58 +84,33 @@ class Settings extends Component {
           <Icon style={styles.icon} size={15} name="user-circle" color="white" />
           <Text style={styles.menuText}>More Settings: </Text>
         </View>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Account </Text>
         </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Privacity </Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
-
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> About </Text>
         </TouchableHighlight>
         <View style={styles.textContainer}>
           <Icon style={styles.icon} size={15} name="user-circle" color="white" />
           <Text style={styles.menuText}>More Settings: </Text>
         </View>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Account </Text>
         </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> Privacity </Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this.onPress}
-        >
-
-
+        <TouchableHighlight style={styles.buttons} onPress={this.onPress}>
           <Text style={styles.text}> About </Text>
         </TouchableHighlight>
-
+        <Button title="Logout" onPress={() => this.logout(this.props)} />
       </View>
-
     );
   }
 }
-export default (Settings);
+export default Settings;

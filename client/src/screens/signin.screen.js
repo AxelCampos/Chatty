@@ -128,6 +128,14 @@ class Signin extends Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      auth: { jwt },
+      navigation: { navigate }
+    } = this.props;
+    if (jwt) navigate("Main");
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.jwt) {
       nextProps.navigation.goBack();
