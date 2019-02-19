@@ -1,8 +1,8 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 const SIGNUP_MUTATION = gql`
-  mutation signup($email: String!, $password: String!, $username: String) {
-    signup(email: $email, password: $password, username: $username) {
+  mutation signup($username: String!, $email: String!, $password: String!) {
+    signup(username: $username, email: $email, password: $password) {
       id
       jwt
       username

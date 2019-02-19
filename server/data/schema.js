@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from "apollo-server";
 
 export const typeDefs = gql`
   # declare custom scalars
@@ -263,7 +263,7 @@ export const typeDefs = gql`
     deleteMiscreated(id: Int, userId: Int): User
     deleteFriend(id: Int, userId: Int): User
     login(email: String!, password: String!): User
-    signup(email: String!, password: String!, username: String): User
+    signup(username: String!, email: String!, password: String!): User
   }
   schema {
     query: Query
