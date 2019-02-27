@@ -21,9 +21,16 @@ const groupQuery = graphql(GROUP_QUERY, {
       },
     },
   }),
-  props: ({ data: { fetchMore, loading, group } }) => ({
+  props: ({
+    data: {
+      fetchMore, loading, group, subscribeToMore, refetch,
+    },
+  }) => ({
+    fetchMore,
     loading,
     group,
+    subscribeToMore,
+    refetch,
     loadMoreEntries() {
       return fetchMore({
         // query: ... (you can specify a different query.

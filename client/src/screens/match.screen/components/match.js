@@ -143,7 +143,7 @@ class Match extends PureComponent {
       id: auth.id,
       userId: user.id,
     }).catch((error) => {
-      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => {} }]);
+      Alert.alert('Error Creating New Friend', error.message, [{ text: 'OK', onPress: () => { } }]);
     });
   };
 
@@ -181,7 +181,7 @@ class Match extends PureComponent {
         navigation.dispatch(goToNewGroup(res.data.createConversation));
       })
       .catch((error) => {
-        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => { } }]);
       });
   };
 
@@ -285,10 +285,10 @@ class Match extends PureComponent {
             />
           </View>
         ) : (
-          <Text style={{ fontFamily: 'Merienda-Regular' }}>
-            Vuelva más tarde, habrá más para ti
+            <Text style={{ fontFamily: 'Merienda-Regular' }}>
+              Vuelva más tarde, habrá más para ti
           </Text>
-        )}
+          )}
       </View>
     );
   };

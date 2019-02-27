@@ -16,6 +16,9 @@ import { AsyncStorage } from 'react-native';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { persistStore, persistCombineReducers } from 'redux-persist';
 import auth from './reducers/auth.reducer';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
 
 const URL = Config.SERVER_URL;
@@ -39,6 +42,28 @@ const errorLink = onError((errors) => {
   console.log(errors);
 });
 const httpLink = createHttpLink({ uri: `http://${URL}` });
+
+export const wsClient = new SubscriptionClient(
+  `ws://${Config.SERVER}/graphql`,
+  {
+    reconnect: true,
+    connectionParams: {
+      // Pass any arguments you want for initialization
+    },
+  },
+);
+
+const webSocketLink = new WebSocketLink(wsClient);
+
+const requestLink = ({ queryOrMutationLink, subscriptionLink }) => ApolloLink.split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  subscriptionLink,
+  queryOrMutationLink,
+);
+
 // middleware for requests
 const middlewareLink = setContext((req, previousContext) => {
   // get the authentication token from local storage if it exists
@@ -52,7 +77,15 @@ const middlewareLink = setContext((req, previousContext) => {
   }
   return previousContext;
 });
-const link = ApolloLink.from([reduxLink, errorLink, middlewareLink.concat(httpLink)]);
+const link = ApolloLink.from([
+  reduxLink,
+  errorLink,
+  requestLink({
+    queryOrMutationLink: middlewareLink.concat(httpLink),
+    subscriptionLink: webSocketLink,
+  }),
+]);
+
 export const client = new ApolloClient({
   link,
   cache,

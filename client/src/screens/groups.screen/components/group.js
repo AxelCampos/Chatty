@@ -41,11 +41,11 @@ const Group = ({ goToMessages, group: { id, name, photo } }) => (
         {photo ? (
           <Image style={styles.image} source={{ uri: photo }} />
         ) : (
-          <Image
-            style={styles.image}
-            source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }}
-          />
-        )}
+            <Image
+              style={styles.image}
+              source={{ uri: 'http://blogs.grupojoly.com/la-sastreria/files/Manolo-Garc%C3%ADa.jpg' }}
+            />
+          )}
       </View>
       <Text style={styles.groupName}>{name}</Text>
     </View>

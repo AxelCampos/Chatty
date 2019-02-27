@@ -99,7 +99,7 @@ class Lifestyle extends Component {
     const {
       userId, gender, civilStatus, children,
     } = this.state;
-    
+
     navigate('LifestyleResult', {
       userId,
       gender,
@@ -139,7 +139,7 @@ class Lifestyle extends Component {
 
   switchCivilStatus = () => {
     const { switchCivilStatusValue } = this.state;
-   
+
     if (switchCivilStatusValue) {
       this.setState({
         switchCivilStatusValue: false,
@@ -293,83 +293,83 @@ class Lifestyle extends Component {
               />
             </View>
           ) : (
-            <View>
-              <View style={[styles.moreFilters, { backgroundColor: '#FAFAFA' }]}>
-                <Icon.Button
-                  name="chevron-double-up"
-                  color="black"
-                  backgroundColor="transparent"
-                  onPress={() => this.setState({ bool: false })}
-                />
-              </View>
+              <View>
+                <View style={[styles.moreFilters, { backgroundColor: '#FAFAFA' }]}>
+                  <Icon.Button
+                    name="chevron-double-up"
+                    color="black"
+                    backgroundColor="transparent"
+                    onPress={() => this.setState({ bool: false })}
+                  />
+                </View>
 
-              <Text style={styles.label}>POR EDAD: </Text>
+                <Text style={styles.label}>POR EDAD: </Text>
 
-              <View style={styles.viewSwitchPicker}>
-                <Picker
-                  style={styles.picker}
-                  selectedValue={this.state.gender}
-                  enabled={this.state.enabledpickerGender}
-                >
-                  <Picker.Item label="18" value="18" />
-                  <Picker.Item label="20" value="20" />
-                  <Picker.Item label="30" value="30" />
-                  <Picker.Item label="40" value="40" />
-                </Picker>
-                <Switch
-                  style={styles.switch}
-                  onValueChange={this.switchGender}
-                  value={this.state.switchGenderValue}
-                  thumbColor={this.state.genderThumbcolor}
-                />
-              </View>
-              <Text style={styles.label}>POR HOBBIES: </Text>
+                <View style={styles.viewSwitchPicker}>
+                  <Picker
+                    style={styles.picker}
+                    selectedValue={this.state.gender}
+                    enabled={this.state.enabledpickerGender}
+                  >
+                    <Picker.Item label="18" value="18" />
+                    <Picker.Item label="20" value="20" />
+                    <Picker.Item label="30" value="30" />
+                    <Picker.Item label="40" value="40" />
+                  </Picker>
+                  <Switch
+                    style={styles.switch}
+                    onValueChange={this.switchGender}
+                    value={this.state.switchGenderValue}
+                    thumbColor={this.state.genderThumbcolor}
+                  />
+                </View>
+                <Text style={styles.label}>POR HOBBIES: </Text>
 
-              <View style={styles.viewSwitchPicker}>
-                <Picker
-                  style={styles.picker}
-                  selectedValue={this.state.gender}
-                  enabled={this.state.enabledpickerGender}
-                >
-                  <Picker.Item label="todos" value="todos" />
-                  <Picker.Item label="ninguno" value="ninguno" />
-                  <Picker.Item label="Baloncesto" value="Baloncesto" />
-                  <Picker.Item label="Futbol" value="Futbol" />
-                </Picker>
-                <Switch
-                  style={styles.switch}
-                  onValueChange={this.switchGender}
-                  value={this.state.switchGenderValue}
-                  thumbColor={this.state.genderThumbcolor}
-                />
-              </View>
-              <Text style={styles.label}>POR RELIGION: </Text>
+                <View style={styles.viewSwitchPicker}>
+                  <Picker
+                    style={styles.picker}
+                    selectedValue={this.state.gender}
+                    enabled={this.state.enabledpickerGender}
+                  >
+                    <Picker.Item label="todos" value="todos" />
+                    <Picker.Item label="ninguno" value="ninguno" />
+                    <Picker.Item label="Baloncesto" value="Baloncesto" />
+                    <Picker.Item label="Futbol" value="Futbol" />
+                  </Picker>
+                  <Switch
+                    style={styles.switch}
+                    onValueChange={this.switchGender}
+                    value={this.state.switchGenderValue}
+                    thumbColor={this.state.genderThumbcolor}
+                  />
+                </View>
+                <Text style={styles.label}>POR RELIGION: </Text>
 
-              <View style={styles.viewSwitchPicker}>
-                <Picker
-                  style={styles.picker}
-                  selectedValue={this.state.gender}
-                  enabled={this.state.enabledpickerGender}
-                >
-                  <Picker.Item label="todas" value="todas" />
-                  <Picker.Item label="ateo" value="ateo" />
-                  <Picker.Item label="musulman" value="musulman" />
-                  <Picker.Item label="cristiano" value="cristiano" />
-                </Picker>
-                <Switch
-                  style={styles.switch}
-                  onValueChange={this.switchGender}
-                  value={this.state.switchGenderValue}
-                  thumbColor={this.state.genderThumbcolor}
-                />
+                <View style={styles.viewSwitchPicker}>
+                  <Picker
+                    style={styles.picker}
+                    selectedValue={this.state.gender}
+                    enabled={this.state.enabledpickerGender}
+                  >
+                    <Picker.Item label="todas" value="todas" />
+                    <Picker.Item label="ateo" value="ateo" />
+                    <Picker.Item label="musulman" value="musulman" />
+                    <Picker.Item label="cristiano" value="cristiano" />
+                  </Picker>
+                  <Switch
+                    style={styles.switch}
+                    onValueChange={this.switchGender}
+                    value={this.state.switchGenderValue}
+                    thumbColor={this.state.genderThumbcolor}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
         </ScrollView>
         {switchChildrenValue === true
-        || switchCivilStatusValue === true
-        || switchGenderValue === true ? (
-          <Button title="Filtrar" onPress={this.goToResult} />
+          || switchCivilStatusValue === true
+          || switchGenderValue === true ? (
+            <Button title="Filtrar" onPress={this.goToResult} />
           ) : (
             undefined
           )}
