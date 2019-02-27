@@ -94,7 +94,6 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
               'tiene hijos',
             ]),
             likes: faker.random.number(20),
-            password: faker.internet.password(),
             birthdate: faker.random.number(11111111, 99999999),
             height: faker.random.number(150, 210),
             weight: faker.random.number(45, 100),

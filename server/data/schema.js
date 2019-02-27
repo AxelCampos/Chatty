@@ -205,7 +205,6 @@ export const typeDefs = gql`
   type Activity {
     id: Int!
     type: String
-    subscription: [User]
   }
 
   type Search {
@@ -271,9 +270,18 @@ export const typeDefs = gql`
     login(email: String!, password: String!): User
     signup(email: String!, password: String!, username: String): User
   }
+
+   type Subscription {
+    # Subscription fires on every message added
+    # for any of the groups with one of these groupIds
+    messageAdded(userId: Int, groupIds: [Int]): Message
+    groupAdded(userId: Int): Group
+  }
+
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `;
 export default typeDefs;

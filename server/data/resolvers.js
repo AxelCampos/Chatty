@@ -1,15 +1,19 @@
 import GraphQLDate from 'graphql-date';
+import R from 'ramda';
 import Sequelize from 'sequelize';
-import { withFilter, ForbiddenError } from 'apollo-server';
+import { withFilter } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
   Group, Message, User, Photo, Lifestyle, Activity, Search, Notification,
 } from './connectors';
 import configurationManager from '../configurationManager';
+import { pubsub } from '../subscriptions';
+import { messageLogic } from './logic';
 
 const JWT_SECRET = configurationManager.jwt.secret;
-
+const MESSAGE_ADDED_TOPIC = 'messageAdded';
+const GROUP_ADDED_TOPIC = 'groupAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -134,26 +138,13 @@ export const resolvers = {
     },
   },
   Mutation: {
-    createMessage(
-      _,
-      {
-        message: { text, groupId },
-      },
-      ctx,
-    ) {
-      if (!ctx.user) {
-        throw new ForbiddenError('Unauthorized');
-      }
-      return ctx.user.then((user) => {
-        if (!user) {
-          throw new ForbiddenError('Unauthorized');
-        }
-        return Message.create({
-          userId: user.id,
-          text,
-          groupId,
+    createMessage(_, args, ctx) {
+      return messageLogic.createMessage(_, args, ctx)
+        .then((message) => {
+          // Publish subscription notification with message
+          pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
+          return message;
         });
-      });
     },
     async createConversation(
       _,
@@ -179,6 +170,10 @@ export const resolvers = {
         users: [user, friend],
       });
       await group.addUsers([user, friend]);
+      // append the user list to the group object
+      // to pass to pubsub so we can check members
+      group.users = [user, ...friend];
+      pubsub.publish(GROUP_ADDED_TOPIC, { [GROUP_ADDED_TOPIC]: group });
       return group;
     },
     async createGroup(
@@ -197,6 +192,10 @@ export const resolvers = {
         users: [user, ...friends],
       });
       await group.addUsers([user, ...friends]);
+      // append the user list to the group object
+      // to pass to pubsub so we can check members
+      group.users = [user, ...friends];
+      pubsub.publish(GROUP_ADDED_TOPIC, { [GROUP_ADDED_TOPIC]: group });
       return group;
     },
     createSearch(
@@ -420,6 +419,29 @@ export const resolvers = {
       });
     },
   },
+  Subscription: {
+    messageAdded: {
+      // the subscription payload is the message.
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
+        (payload, args) => Boolean(
+          args.groupIds
+          && ~args.groupIds.indexOf(payload.messageAdded.groupId)
+          && args.userId !== payload.messageAdded.userId,
+        ),
+      ),
+    },
+    groupAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
+        (payload, args) => Boolean(
+          args.userId
+          && ~R.pluck('id', payload.groupAdded.users).indexOf(args.userId)
+          && args.userId !== payload.groupAdded.users[0].id, // don't send to user creating group
+        ),
+      ),
+    },
+  },
 
   Group: {
     users(group) {
@@ -551,11 +573,6 @@ export const resolvers = {
   Lifestyle: {
     from(lifestyle) {
       return lifestyle.getUser();
-    },
-  },
-  Activity: {
-    subscription(activity) {
-      return activity.getUsers();
     },
   },
   Search: {
